@@ -1,0 +1,52 @@
+version: "3.6"
+
+services:
+  app:
+    build:
+      context: .
+    container_name: app
+    restart: on-failure:10
+    volumes:
+      - static-data:/vol/web
+    depends_on:
+      - db
+    env_file:
+      - .env
+
+  db:
+    container_name: db
+    image: postgres:13-alpine
+    restart: always
+    volumes:
+      - postgres-data:/var/lib/postgresql/data
+    env_file:
+      - .env
+
+  proxy:
+    build:
+      context: ./proxy
+    container_name: proxy
+    restart: always
+    depends_on:
+      - app
+    ports:
+      - 80:8000
+    volumes:
+      - static-data:/vol/static
+
+  bot:
+    build:
+      context: ./telegram_bot
+    container_name: bot
+    depends_on:
+      - db
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - /codebase:/codebase
+      - /storage:/storage
+
+volumes:
+  postgres-data:
+  static-data:

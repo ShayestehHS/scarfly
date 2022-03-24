@@ -1,0 +1,1 @@
+1. For using the admin page, you should go to this url. (https://api.scarfly.ir/scarf_admin_ly/)
