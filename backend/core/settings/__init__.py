@@ -6,11 +6,7 @@ OKGREEN = '\033[92m'
 OKCYAN = '\033[96m'
 FAIL = '\033[91m'
 
-if setting_env == 'LOCAL':
-    from core.settings.local import *
-    print(OKCYAN + "-- Local setting imported --" + ENDC)
-
-elif setting_env == 'PRODUCTION':
+if setting_env == 'PRODUCTION':
     from core.settings.production import *
     print(OKCYAN + "-- Production setting imported --" + ENDC)
 
