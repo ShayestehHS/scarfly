@@ -14,10 +14,10 @@ logger = logging.getLogger(__name__)
 class Connection(object):
     def __enter__(self):
         self.conn = connect(
-            host="localhost",
-            database="bs_db",
-            user="admin",
-            password="ASzj8#8Zz34PrK-uN8YC",
+            host="db",
+            database=os.environ.get('POSTGRES_DB'),
+            user=os.environ.get('POSTGRES_USER'),
+            password=os.environ.get('POSTGRES_PASSWORD'),
             port=5432,
             cursor_factory=RealDictCursor
         )
