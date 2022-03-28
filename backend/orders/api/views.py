@@ -11,11 +11,10 @@ class CreateOrderAPIView(CreateAPIView):
     URL: https://scarfly.ir/orders/create/
     POST:
         DATA: {
-            'product_id': 1,
-            'address': value,
-            'postal_code': value,
-            }
-            * product_id should be integer
+                'product_id': 1(String),
+                'address': value(String),
+                'postal_code': value(String),
+                }
         RETURN:
             1: HTTP 400:
                 { "detail": message } => (CommonProblem: Not matched `product_id`)
@@ -27,20 +26,17 @@ class CreateOrderAPIView(CreateAPIView):
                 { "duplicated" : message } => (CommonProblem: Fail to create unique payment_id)
             3: HTTP 201:
                 {
-                    "id": order_id,
                     "product": {
-                        "id": product_id,
-                        "name": product_name
+                        "id": 2,
+                        "name": "شال بچگانه"
                     },
-                    "timestamp": "2022-02-23T21:10:02.223658+03:30",
-                    "address": "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor\r\nincididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, \r\nquis nostrud exercitation ullamco laboris nisi",
+                    "address": "asdf",
                     "postal_code": "1737863549",
-                    "is_paid": false,
-                    "authority": "A00000000000000000000000000320772596",
-                    "payment_id": "5-5-ec53b7d1",
+                    "authority": "A00000000000000000000000000328961379",
+                    "payment_id": "1-2-6c27425f",
                     "status": "1",
                     "offer_key": null,
-                    "user": user_id
+                    "timestamp": "2022-03-28T13:25:58.205702+04:30"
                 }
     """
     permission_classes = [IsAuthenticated]
