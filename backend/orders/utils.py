@@ -11,7 +11,7 @@ from rest_framework.response import Response
 def get_authority(amount, description, mobile, email: None):
     req_data = {
         "merchant_id": settings.ZP_MERCHANT,
-        "amount": amount,
+        "amount": int(amount),
         "callback_url": settings.CALLBACK_URL,
         "description": description,
         "metadata": {"mobile": mobile, 'email': email}
