@@ -108,6 +108,7 @@ URL: https://scarfly.ir/orders/pk/
 __________________________________________________________________________________________
 URL: https://scarfly.ir/orders/pk/
 URL: https://scarfly.ir/orders/authority/
+NOTE: 1. 🔒User should be authenticated
 GET:
     Response:
         1. HTTP 404:
@@ -131,6 +132,7 @@ GET:
             }
 __________________________________________________________________________________________
 URL: https://scarfly.ir/orders/create/
+NOTE: 1. 🔒User should be authenticated
 POST:
     DATA: {
             'product_id': 1(String),
