@@ -14,7 +14,8 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
         product = self.context.get('product')
         if product is None:
             product = Product.objects.filter(id=obj.product_id).only('name').first()
-
+        else:
+            product = product['pro_code']
         data = {'id': obj.product_id, 'name': product.name}
         return data
 
@@ -25,17 +26,19 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
+    product = serializers.CharField(source='product.pro_code')
+
     class Meta:
         model = Order
         fields = ('product', 'address', 'postal_code')
 
     def to_representation(self, instance):
         context = self.context.copy()
-        context['product'] = self.validated_data['product']
+        context['product'] = self.validated_data['product']['pro_code']
         return OrderDetailUpdateSerializer(instance=instance, context=context).data
 
     def create(self, validated_data):
-        product = validated_data['product']
+        product: Product = validated_data['product']['pro_code']
         request = self.context['request']
         user = request.user
         description = self.context.get('description', "خرید از : اسکارف لی")
