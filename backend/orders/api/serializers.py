@@ -14,8 +14,7 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
         product = self.context.get('product')
         if product is None:
             product = Product.objects.filter(id=obj.product_id).only('name').first()
-        else:
-            product = product['pro_code']
+
         data = {'id': obj.product_id, 'name': product.name}
         return data
 
