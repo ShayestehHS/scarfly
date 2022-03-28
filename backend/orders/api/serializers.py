@@ -21,7 +21,7 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = "__all__"
+        fields = ('product', 'address', 'postal_code', 'authority', 'payment_id', 'status', 'offer_key', 'timestamp')
         read_only_fields = ('is_paid', 'authority')
 
 
