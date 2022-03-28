@@ -19,7 +19,6 @@ from django.conf import settings
 from django.urls import path, include
 
 urlpatterns = [
-    path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot')), # Fake admin url
     path('scarf_admin_ly/', admin.site.urls),
     path('accounts/', include('accounts.api.urls', namespace='accounts')),
     path('orders/', include('orders.api.urls', namespace='orders')),
@@ -30,3 +29,5 @@ if settings.DEBUG:
 
     urlpatterns += [path('__debug__/', include(debug_toolbar_url))]
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+else:
+    urlpatterns += [path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot'))]  # Fake admin url
