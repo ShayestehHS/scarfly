@@ -1,4 +1,5 @@
 from django.conf import settings
+from django.core.exceptions import ValidationError
 from django.db import models
 from telegram import Bot, Message
 from telegram.constants import PARSEMODE_MARKDOWN_V2
@@ -30,6 +31,8 @@ class Product(models.Model):
 
     def save(self, *args, **kwargs):
         super(Product, self).save(*args, **kwargs)
+        if self.sell_price < self.buy_price:
+            raise ValidationError("Sell price should be greater that buy price")
         bot = Bot(token=TELEGRAM_TOKEN)
         caption = f"نام محصول: {self.name} \n" \
                   f"کد محصول: {self.pro_code} \n" \
