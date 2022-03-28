@@ -32,6 +32,12 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('product', 'address', 'postal_code')
 
+    def validate_product(self, value):
+        product = Product.objects.filter(pro_code=value).only('sell_price', 'id', 'pro_code').first()
+        if product is None:
+            raise serializers.ValidationError({'product': 'Please enter a valid product code.'})
+        return product
+
     def to_representation(self, instance):
         context = self.context.copy()
         context['product'] = self.validated_data['product']['pro_code']
