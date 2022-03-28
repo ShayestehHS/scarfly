@@ -39,7 +39,6 @@ DJANGO_APPS = [
 THIRD_PARTY_APPS = [
     'rest_framework',
     'django_cleanup.apps.CleanupConfig',
-    'admin_honeypot',
 ]
 LOCAL_APPS = [
     'accounts.apps.AccountsConfig',

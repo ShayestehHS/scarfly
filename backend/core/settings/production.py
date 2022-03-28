@@ -9,7 +9,7 @@ STATIC_ROOT = '/vol/web/static'
 MEDIA_ROOT = '/vol/web/media'
 MEDIA_URL = '/media/'
 
-INSTALLED_APPS += ['corsheaders']
+INSTALLED_APPS += ['corsheaders', 'admin_honeypot']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware', ]
 CORS_ORIGIN_ALLOW_ALL = True  # ToDo
 
