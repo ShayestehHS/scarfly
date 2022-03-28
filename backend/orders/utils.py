@@ -22,7 +22,7 @@ def get_authority(amount, description, mobile, email: None):
     if len(req.json()['errors']) != 0:
         e_code = req.json()['errors']['code']
         e_message = req.json()['errors']['message']
-        raise APIException({"code": e_code, "message": e_message})
+        raise APIException({"code": e_code, "message": e_message, 'request data': req_data})
 
     authority = req.json()['data']['authority']
     return authority
