@@ -24,7 +24,7 @@ class ProductAdmin(admin.ModelAdmin):
     list_filter = ('is_available',)
     search_fields = ('pro_code', 'name')
     search_help_text = "Search by product code or name of products."
-    list_per_page = 20
+    list_per_page = 10
     ordering = ('-pro_code',)
     actions = ['make_paid', 'make_not_available']
     formfield_overrides = {
