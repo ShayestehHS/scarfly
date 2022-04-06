@@ -42,6 +42,7 @@ class Coupon(models.Model):
     key = models.CharField(max_length=32, unique=True)
     is_percent = models.BooleanField(default=True)
     price_amount = models.PositiveSmallIntegerField()
+    description = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.is_percent and self.price_amount > 100:
