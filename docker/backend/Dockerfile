@@ -4,6 +4,9 @@ LABEL MAINTAINER="ShayestehHS"
 WORKDIR /app
 ADD ./backend/requirements.txt /app/backend/
 
+RUN python -m venv /py && \
+    /py/bin/pip install --upgrade pip && \
+    apk add --update postgresql-client
 
 RUN pip install --upgrade pip
 
@@ -14,7 +17,11 @@ RUN apk add build-base python3-dev py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 RUN pip install Pillow==9.0.1
 
-RUN pip install -r backend/requirements.txt
+RUN apk add --update --virtual .tmp-deps \
+        build-base libffi-dev openssl-dev gcc postgresql-dev musl-dev linux-headers && \
+    /py/bin/pip install -r /requirements.txt
+
+RUN apk del .tmp-deps
 
 ADD ./docker /app/docker
 ADD ./backend /app/backend
