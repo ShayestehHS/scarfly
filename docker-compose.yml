@@ -1,52 +1,38 @@
-version: "3.6"
+version: '2'
 
 services:
-  app:
-    build:
-      context: .
-    container_name: app
-    restart: on-failure:10
-    volumes:
-      - static-data:/vol/web
-    depends_on:
-      - db
-    env_file:
-      - .env
-
-  db:
-    container_name: db
-    image: postgres:13-alpine
-    restart: always
-    volumes:
-      - postgres-data:/var/lib/postgresql/data
-    env_file:
-      - .env
-
-  proxy:
-    build:
-      context: ./proxy
-    container_name: proxy
-    restart: always
-    depends_on:
-      - app
-    ports:
-      - 80:8000
-    volumes:
-      - static-data:/vol/static
-
-  bot:
-    build:
-      context: ./telegram_bot
-    container_name: bot
-    depends_on:
-      - db
-    restart: always
-    env_file:
-      - .env
-    volumes:
-      - /codebase:/codebase
-      - /storage:/storage
+    nginx:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/nginx/Dockerfile
+        ports:
+            - 80:80
+            - 443:443
+        volumes:
+            - static_volume:/app/backend/core/static
+            - ./docker/nginx/production:/etc/nginx/conf.d
+            - ./docker/nginx/certbot/conf:/etc/letsencrypt
+            - ./docker/nginx/certbot/www:/var/www/certbot
+        depends_on:
+            - backend
+    certbot:
+        image: certbot/certbot
+        restart: unless-stopped
+        volumes:
+            - ./docker/nginx/certbot/conf:/etc/letsencrypt
+            - ./docker/nginx/certbot/www:/var/www/certbot
+        entrypoint: "/bin/sh -c 'trap exit TERM; while :; do certbot renew; sleep 12h & wait $${!}; done;'"
+    backend:
+        restart: unless-stopped
+        build:
+            context: .
+            dockerfile: ./docker/backend/Dockerfile
+        entrypoint: /app/docker/backend/wsgi-entrypoint.sh
+        volumes:
+            - static_volume:/app/backend/core/static
+        expose:
+            - 8000
 
 volumes:
-  postgres-data:
-  static-data:
+    static_volume: {}

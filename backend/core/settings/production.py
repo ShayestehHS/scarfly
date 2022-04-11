@@ -3,10 +3,11 @@ from core.settings.base import *
 
 DEBUG = False
 SECRET_KEY = os.environ.get('SECRET_KEY')
-ALLOWED_HOSTS = ['185.235.41.234', 'scarfly.ir', 'api.scarfly.ir']
+ALLOWED_HOSTS = ['0.0.0.0', 'scarfly.ir', 'api.scarfly.ir', 'www.scarfly.ir', 'www.api.scarfly.ir']
 
-STATIC_ROOT = '/vol/web/static'
-MEDIA_ROOT = '/vol/web/media'
+STATIC_ROOT = BASE_DIR / 'static'
+MEDIA_ROOT = BASE_DIR / 'media'
+STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
 INSTALLED_APPS += ['corsheaders', 'admin_honeypot']
