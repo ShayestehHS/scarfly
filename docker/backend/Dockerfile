@@ -19,7 +19,7 @@ RUN pip install Pillow==9.0.1
 
 RUN apk add --update --virtual .tmp-deps \
         build-base libffi-dev openssl-dev gcc postgresql-dev musl-dev linux-headers && \
-    /py/bin/pip install -r /requirements.txt
+    /py/bin/pip install -r backend/requirements.txt
 
 RUN apk del .tmp-deps
 
