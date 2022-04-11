@@ -1,9 +1,6 @@
-# add execute rights
-chmod +x docker/backend/wsgi-entrypoint.sh
-
 #!/bin/sh
 
-until cd /app/backend/server
+until cd /app/backend/core
 do
     echo "Waiting for server volume..."
 done
