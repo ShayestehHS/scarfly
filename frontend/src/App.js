@@ -1,6 +1,7 @@
 import {Routes, Route} from 'react-router-dom'
 import Home from './components/PaymentResult/PaymentResult';
 import axios from 'axios';
+import Product from './components/product/Product';
 
 
 if (window.location.origin === "http://localhost:3000") {
@@ -10,7 +11,6 @@ if (window.location.origin === "http://localhost:3000") {
 }
 
 
-import Product from './components/product/Product';
 
 function App() {
   return (
