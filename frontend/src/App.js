@@ -1,5 +1,6 @@
 import {Routes, Route} from 'react-router-dom'
 import Home from './components/PaymentResult/PaymentResult';
+import axios from 'axios';
 
 
 if (window.location.origin === "http://localhost:3000") {
