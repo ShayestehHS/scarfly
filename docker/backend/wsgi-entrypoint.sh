@@ -5,11 +5,7 @@ do
     echo "Waiting for server volume..."
 done
 
-until ./app/backend/manage.py migrate
-do
-    echo "Waiting for db to be ready..."
-    sleep 2
-done
+./manage.py wait_for_db
 
 ./manage.py collectstatic --noinput
 
