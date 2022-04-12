@@ -1,7 +1,8 @@
 FROM python:3.9-alpine3.13
 LABEL MAINTAINER="ShayestehHS"
 
-ENV PYTHONUNBUFFERED 1
+WORKDIR /app
+ADD ./backend/requirements.txt /app/backend/
 
 RUN python -m venv /py && \
     /py/bin/pip install --upgrade pip && \
@@ -11,13 +12,13 @@ RUN python -m venv /py && \
 RUN apk add build-base python3-dev py-pip jpeg-dev zlib-dev
 ENV LIBRARY_PATH=/lib:/usr/lib
 
-COPY ./requirements.txt /requirements.txt
+COPY backend/requirements.txt /requirements.txt
 
 RUN apk add --update --virtual .tmp-deps \
         build-base libffi-dev openssl-dev gcc postgresql-dev musl-dev linux-headers && \
     /py/bin/pip install -r /requirements.txt
 
-COPY ./scripts /scripts
+COPY scripts /scripts
 COPY ./backend /app
 
 WORKDIR /app
