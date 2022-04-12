@@ -1,13 +1,11 @@
 #!/bin/sh
 
-until cd /app/backend/core
-do
-    echo "Waiting for server volume..."
-done
-
-./manage.py wait_for_db
+cd backend
 
 ./manage.py collectstatic --noinput
+./manage.py wait_for_db
+./manage.py makemigrations
+./manage.py migrate
 
 gunicorn core.wsgi --bind 0.0.0.0:8000 --workers 4 --threads 4
 
