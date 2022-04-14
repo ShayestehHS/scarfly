@@ -19,15 +19,15 @@ from django.conf import settings
 from django.urls import path, include
 
 urlpatterns = [
-    path('scarf_admin_ly/', admin.site.urls),
-    path('accounts/', include('accounts.api.urls', namespace='accounts')),
-    path('orders/', include('orders.api.urls', namespace='orders')),
-    path('products/', include('products.api.urls', namespace='products')),
+    path('api/scarf_admin_ly/', admin.site.urls),
+    path('api/accounts/', include('accounts.api.urls', namespace='accounts')),
+    path('api/orders/', include('orders.api.urls', namespace='orders')),
+    path('api/products/', include('products.api.urls', namespace='products')),
 ]
 if settings.DEBUG:
     from debug_toolbar import urls as debug_toolbar_url
 
-    urlpatterns += [path('__debug__/', include(debug_toolbar_url))]
-    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += [path('api/__debug__/', include(debug_toolbar_url))]
+    urlpatterns += static('api/' + settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 else:
-    urlpatterns += [path('admin/', include('admin_honeypot.urls', namespace='admin_honeypot'))]  # Fake admin url
+    urlpatterns += [path('api/admin/', include('admin_honeypot.urls', namespace='admin_honeypot'))]  # Fake admin url
