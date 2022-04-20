@@ -1,12 +1,11 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, UpdateAPIView
+from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.api.serializsers import LoginRegisterSerializer, RetrieveUserSerializer, UpdateUserSerializer
-from accounts.permissions import OnlyAccountOfUser
+from accounts.api.serializsers import LoginRegisterSerializer, RetrieveUpdateUserSerializer
 
 USER = get_user_model()
 
@@ -90,7 +89,8 @@ class Verify(APIView):
 
 
 class RetrieveUpdateUserAPIView(RetrieveUpdateAPIView):
-    """GET:
+    """
+    GET:
         Response:
             1: HTTP 401:
                 { "detail": message } => (CommonProblem: User is not authenticated)
@@ -102,19 +102,23 @@ class RetrieveUpdateUserAPIView(RetrieveUpdateAPIView):
                 }
     PUT/PATCH:
         DATA:
-            {"first_name":"Value", "last_name":"Value"}
+            {
+                "first_name": "Value",
+                "last_name": "Value",
+                "phone_number": "+989876543210"
+            }
         Response:
             1. HTTP 401:
                 { "detail": message } => (CommonProblem: User is not authenticated)
             2: HTTP 200:
-                {"first_name":"Value", "last_name":"Value"}
+                {
+                    "first_name": "Value",
+                    "last_name": "Value",
+                    "phone_number": "+989876543210"
+                }
     """
     permission_classes = [IsAuthenticated]
-
-    def get_serializer(self, *args, **kwargs):
-        if self.request.method == "POST":
-            return RetrieveUserSerializer
-        return UpdateUserSerializer
+    serializer_class = RetrieveUpdateUserSerializer
 
     def get_object(self):
         return self.request.user

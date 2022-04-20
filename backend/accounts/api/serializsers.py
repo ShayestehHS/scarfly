@@ -63,8 +63,8 @@ class LoginRegisterSerializer(serializers.Serializer):
         return user
 
 
-class RetrieveUserSerializer(serializers.ModelSerializer):
+class RetrieveUpdateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = USER
-        fields = ['first_name', 'last_name', 'phone_number']\
+        fields = ['first_name', 'last_name', 'phone_number']
 
