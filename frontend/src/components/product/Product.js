@@ -1,30 +1,25 @@
 import Login from "../login/Login"
 import CartInfo from "../CartInfo/CartInfo"
-import { useState, useEffect } from "react"
-import { useParams } from "react-router-dom"
+import {useEffect, useState} from "react"
+import {useParams} from "react-router-dom"
 import toast from "react-hot-toast"
-import {  verify } from "../API/DefaultAPI"
+import {verify} from "../API/DefaultAPI"
 
 
+const base_url = 'https://scarfly.ir/api';
 const getData = async (productID) => {
-    const response = await fetch(`https://api.scarfly.ir/products/${productID}/`)
-    return response
+    return await fetch(`${base_url}/products/${productID}/`)
 }
 
 export default function Product() {
     const [loginState, setLoginState] = useState(false)
     const [product, setproduct] = useState()
     let params = useParams()
-
-
-
         useEffect( () => {
-
             verify().then(res => {
                 if(res.status === 200){
                     setLoginState(true)
                 }
-                
             })
 
             getData(params.productID).then(async (e) => {
@@ -32,7 +27,6 @@ export default function Product() {
                 if(e.status === 200){
                     const data = await e.json()
                     setproduct(data)
-                   
                     return
                 }
                 if(e.status === 404){
@@ -46,24 +40,8 @@ export default function Product() {
                 toast.error(
                     'خطایی رخ داد .\n دوباره سعی کنید.'
                 )
-                
-                
-                
             })
-            //////////
-
-            
-
-            
-            
-         
-
         }, [params])
-        
-       
-        
-
-    
 
     return(
         <div className="block  flex-col bg-gray-200">
