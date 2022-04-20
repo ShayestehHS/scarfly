@@ -7,7 +7,7 @@ from products.models import Product
 
 class RetrieveProductAPIView(RetrieveAPIView):
     """
-    URL: https://scarfly.ir/products/<int:pro_code>/
+    URL: https://scarfly.ir/products/retrieve/<int:pro_code>/
     GET:
         Response:
             1. HTTP 401:

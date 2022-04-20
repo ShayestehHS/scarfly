@@ -1,11 +1,12 @@
 from django.contrib.auth import get_user_model
 from rest_framework import status
-from rest_framework.generics import CreateAPIView, RetrieveAPIView
+from rest_framework.generics import CreateAPIView, RetrieveAPIView, RetrieveUpdateAPIView, UpdateAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from accounts.api.serializsers import LoginRegisterSerializer, RetrieveUserSerializer
+from accounts.api.serializsers import LoginRegisterSerializer, RetrieveUserSerializer, UpdateUserSerializer
+from accounts.permissions import OnlyAccountOfUser
 
 USER = get_user_model()
 
@@ -88,28 +89,35 @@ class Verify(APIView):
         return Response({'detail': 'user is authenticated'})
 
 
-class RetrieveUserAPIView(RetrieveAPIView):
-    """
-    First case: User is authenticated
-        URL: https://scarfly.ir/accounts/retrieve/<str:any_thing>/
-    Second case: User is not authenticated
-        URL: https://scarfly.ir/accounts/retrieve/<str:phone_number>/
-    GET:
+class RetrieveUpdateUserAPIView(RetrieveUpdateAPIView):
+    """GET:
         Response:
-            1: HTTP 404:
-                { "detail": "Not found." }
+            1: HTTP 401:
+                { "detail": message } => (CommonProblem: User is not authenticated)
             2: HTTP 200
                 {
                     "first_name": "Value",
                     "last_name": "Value",
                     "phone_number": "+989876543210"
                 }
+    PUT/PATCH:
+        DATA:
+            {"first_name":"Value", "last_name":"Value"}
+        Response:
+            1. HTTP 401:
+                { "detail": message } => (CommonProblem: User is not authenticated)
+            2: HTTP 200:
+                {"first_name":"Value", "last_name":"Value"}
     """
-    serializer_class = RetrieveUserSerializer
-    lookup_field = 'phone_number'
-    queryset = USER.objects.all()
+    permission_classes = [IsAuthenticated]
+
+    def get_serializer(self, *args, **kwargs):
+        if self.request.method == "POST":
+            return RetrieveUserSerializer
+        return UpdateUserSerializer
 
     def get_object(self):
-        if self.request.user.is_authenticated:
-            return self.request.user
-        return super(RetrieveUserAPIView, self).get_object()
+        return self.request.user
+
+    def perform_update(self, serializer):
+        serializer.save(user=self.request.user)

@@ -8,7 +8,7 @@ import {verify} from "../API/DefaultAPI"
 
 const base_url = 'https://scarfly.ir/api';
 const getData = async (productID) => {
-    return await fetch(`${base_url}/products/${productID}/`)
+    return await fetch(`${base_url}/products/retrieve/${productID}/`)
 }
 
 export default function Product() {
