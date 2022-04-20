@@ -31,7 +31,7 @@ DATABASES = {
 TELEGRAM = {
     'bot_token': os.getenv('TELEGRAM_BOT_BOT_TOKEN'),
     'channel_username': '@scarfly_ir',
-    'full_url': 'https://api.scarfly.ir',
+    'full_url': 'https://scarfly.ir',
 }
 
 EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')
