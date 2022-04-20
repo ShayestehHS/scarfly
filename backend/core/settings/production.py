@@ -1,7 +1,7 @@
 import os
 from core.settings.base import *
 
-DEBUG = False
+DEBUG = bool(int(os.getenv("DEBUG")))
 SECRET_KEY = os.environ.get('SECRET_KEY')
 ALLOWED_HOSTS = ['0.0.0.0', 'scarfly.ir', 'api.scarfly.ir', 'www.scarfly.ir', 'www.api.scarfly.ir']
 
@@ -12,7 +12,10 @@ MEDIA_URL = '/api/media/'
 
 INSTALLED_APPS += ['corsheaders', 'admin_honeypot']
 MIDDLEWARE += ['corsheaders.middleware.CorsMiddleware', ]
-CORS_ORIGIN_ALLOW_ALL = True  # ToDo
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ORIGIN_WHITELIST = (
+    'https://scarfly.ir',
+)
 
 DATABASES = {
     'default': {
