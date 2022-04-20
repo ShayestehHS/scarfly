@@ -16,7 +16,7 @@ function App() {
   return (
     <Routes>
       <Route path='/orders/verify/' element={<Home/>} />
-      <Route path='/products/:productID' element={<Product/>} />
+      <Route path='/products/:productID/' element={<Product/>} />
     </Routes>
   );
 }
