@@ -23,7 +23,7 @@ class Product(models.Model):
     channel_message_id = models.PositiveIntegerField(null=True, blank=True)
     sell_price = models.PositiveIntegerField()
     buy_price = models.PositiveIntegerField()
-    description = models.TextField()
+    description = models.TextField(null=True, blank=True)
     is_available = models.BooleanField(default=True)
 
     def __str__(self):
@@ -34,29 +34,30 @@ class Product(models.Model):
         if self.sell_price < self.buy_price:
             raise ValidationError("Sell price should be greater that buy price")
 
-        bot = Bot(token=TELEGRAM_TOKEN)
-        caption = f"نام محصول: {self.name} \n" \
-                  f"کد محصول: {self.pro_code} \n" \
-                  f"وضعیت موجودی: {'موجود' if self.is_available else 'ناموجود'} \n" \
-                  f"توضیحات محصول: {self.description}\n\n\n" \
-                  f"[مشاهده در اینستاگرام]({self.instagram_url})\n" \
-                  fr"@scarfly\_admin ارتباط با ادمین"
+        if self.description:
+            bot = Bot(token=TELEGRAM_TOKEN)
+            caption = f"نام محصول: {self.name} \n" \
+                      f"کد محصول: {self.pro_code} \n" \
+                      f"وضعیت موجودی: {'موجود' if self.is_available else 'ناموجود'} \n" \
+                      f"توضیحات محصول: {self.description}\n\n\n" \
+                      f"[مشاهده در اینستاگرام]({self.instagram_url})\n" \
+                      fr"@scarfly\_admin ارتباط با ادمین"
 
-        if not self.channel_message_id:
-            # Send the post to channel and update the 'channel_message_id' field
-            message: Message = bot.send_photo(chat_id=TELEGRAM_CHANNEL_USERNAME, caption=caption,
-                                              parse_mode=PARSEMODE_MARKDOWN_V2,
-                                              photo=f"{SCARFLY_FULL_URL}{self.image.url}")
+            if not self.channel_message_id:
+                # Send the post to channel and update the 'channel_message_id' field
+                message: Message = bot.send_photo(chat_id=TELEGRAM_CHANNEL_USERNAME, caption=caption,
+                                                  parse_mode=PARSEMODE_MARKDOWN_V2,
+                                                  photo=f"{SCARFLY_FULL_URL}{self.image.url}")
 
-            self.channel_message_id = message.message_id
-            self.save(update_fields=['channel_message_id'])
+                self.channel_message_id = message.message_id
+                self.save(update_fields=['channel_message_id'])
 
-        else:
-            # Update the related post from channel
-            try:
-                bot.edit_message_caption(chat_id=TELEGRAM_CHANNEL_USERNAME,
-                                         message_id=self.channel_message_id,
-                                         caption=caption, parse_mode=PARSEMODE_MARKDOWN_V2)
-            except BadRequest as e:
-                if 'Message is not modified'.lower() not in e.message.lower():
-                    raise e
+            else:
+                # Update the related post from channel
+                try:
+                    bot.edit_message_caption(chat_id=TELEGRAM_CHANNEL_USERNAME,
+                                             message_id=self.channel_message_id,
+                                             caption=caption, parse_mode=PARSEMODE_MARKDOWN_V2)
+                except BadRequest as e:
+                    if 'Message is not modified'.lower() not in e.message.lower():
+                        raise e
