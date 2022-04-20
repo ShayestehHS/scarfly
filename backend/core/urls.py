@@ -28,6 +28,6 @@ if settings.DEBUG:
     from debug_toolbar import urls as debug_toolbar_url
 
     urlpatterns += [path('api/__debug__/', include(debug_toolbar_url))]
-    urlpatterns += static('api/' + settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 else:
     urlpatterns += [path('api/admin/', include('admin_honeypot.urls', namespace='admin_honeypot'))]  # Fake admin url
