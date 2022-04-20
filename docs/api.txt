@@ -1,19 +1,22 @@
-1- https://scarfly.ir/accounts/register/
-2- https://scarfly.ir/accounts/login/
-3- https://scarfly.ir/accounts/refresh/
-4- https://scarfly.ir/accounts/verify/
-5- https://scarfly.ir/orders/retrieve/<str:authority>/
-6- https://scarfly.ir/orders/retrieve/<int:pk>/
-7- https://scarfly.ir/orders/pk/
-8- https://scarfly.ir/orders/authority/
-9- https://scarfly.ir/order/create/
-10- https://scarfly.ir/products/<int:pro_code>/
+1-  https://scarfly.ir/api/accounts/register/
+2-  https://scarfly.ir/api/accounts/login/
+3-  https://scarfly.ir/api/accounts/refresh/
+4-  https://scarfly.ir/api/accounts/verify/
+5-  https://scarfly.ir/api/accounts/retrieve/
+6-  https://scarfly.ir/api/accounts/update/
 
+7-  https://scarfly.ir/api/orders/retrieve/<str:authority>/
+8-  https://scarfly.ir/api/orders/retrieve/<int:pk>/
+9-  https://scarfly.ir/api/orders/pk/
+10- https://scarfly.ir/api/orders/authority/
+11- https://scarfly.ir/api/order/create/
+
+12- https://scarfly.ir/api/products/retrieve/<int:pro_code>/
 
 ******************************************************************************************
 
 
-URL: https://scarfly.ir/accounts/register/
+URL: https://scarfly.ir/api/accounts/register/
 POST:
     DATA: { "phone_number" : value }
         * Length of phone_number should be 13 character
@@ -34,7 +37,7 @@ POST:
                 "refresh_expiration": UNIX time,
             }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/accounts/login/
+URL: https://scarfly.ir/api/accounts/login/
 POST:
     DATA: { "phone_number" : value }
         * Length of phone_number: 13
@@ -48,7 +51,7 @@ POST:
         3: HTTP 200:
             { "access": token, "refresh":token }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/accounts/refresh/
+URL: https://scarfly.ir/api/accounts/refresh/
 POST:
     DATA: { "refresh" : value }
     Response:
@@ -59,7 +62,7 @@ POST:
         3: HTTP 200:
             { "access": token }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/accounts/verify/
+URL: https://scarfly.ir/api/accounts/verify/
 GET:
     Response:
         1: HTTP 401:
@@ -67,14 +70,11 @@ GET:
         2: HTTP 200:
             {'detail': 'user is authenticated'}
 __________________________________________________________________________________________
-First case: User is authenticated
-        URL: https://scarfly.ir/accounts/retrieve/<str:any_thing>/
-Second case: User is not authenticated
-    URL: https://scarfly.ir/accounts/retrieve/<str:phone_number>/
+URL: https://scarfly.ir/api/accounts/retrieve/
 GET:
     Response:
-        1: HTTP 404:
-            { "detail": "Not found." }
+        1: HTTP 401:
+            { "detail": message } => (CommonProblem: User is not authenticated)
         2: HTTP 200
             {
                 "first_name": "Value",
@@ -82,7 +82,17 @@ GET:
                 "phone_number": "+989876543210"
             }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/orders/pk/
+URL: https://scarfly.ir/api/accounts/update/
+PUT/PATCH:
+        DATA:
+            {"first_name":"Value", "last_name":"Value"}
+        Response:
+            1. HTTP 401:
+                { "detail": message } => (CommonProblem: User is not authenticated)
+            2: HTTP 200:
+                {"first_name":"Value", "last_name":"Value"}
+__________________________________________________________________________________________
+URL: https://scarfly.ir/api/orders/pk/
     URL: https://scarfly.ir/orders/authority/
     GET:
         Response:
@@ -106,7 +116,7 @@ URL: https://scarfly.ir/orders/pk/
                     "user": user_id
                 }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/orders/pk/
+URL: https://scarfly.ir/api/orders/pk/
 URL: https://scarfly.ir/orders/authority/
 NOTE: 1. 🔒User should be authenticated
 GET:
@@ -131,7 +141,7 @@ GET:
                 "user": user_id
             }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/orders/create/
+URL: https://scarfly.ir/api/orders/create/
 NOTE: 1. 🔒User should be authenticated
 POST:
     DATA: {
@@ -163,7 +173,7 @@ POST:
                 "timestamp": "2022-03-28T13:25:58.205702+04:30"
             }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/products/<int:pro_code>/
+URL: https://scarfly.ir/api/products/<int:pro_code>/
 GET:
     Response:
         1. HTTP 401:
