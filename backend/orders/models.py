@@ -14,8 +14,9 @@ class Order(models.Model):
         ('2', 'اتمام پرداخت'),
         ('3', 'دریافت از انبار'),
         ('4', 'در حال چاپ'),
-        ('5', 'در حال ارسال'),
-        ('6', 'دریافت شده توسط مشتری'),
+        ('5', 'آماده‌ی ارسال'),
+        ('6', 'تحویل داده شده به شرکت پست'),
+        ('7', 'دریافت شده توسط مشتری'),
     )
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
     product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
