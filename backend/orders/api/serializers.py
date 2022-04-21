@@ -25,7 +25,7 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
-    product = serializers.CharField(source='product.pro_code')
+    product = serializers.CharField()
 
     class Meta:
         model = Order
@@ -39,14 +39,14 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         context = self.context.copy()
-        context['product'] = self.validated_data['product']['pro_code']
+        context['product'] = self.validated_data['product']
         return OrderDetailUpdateSerializer(instance=instance, context=context).data
 
     def create(self, validated_data):
-        product: Product = validated_data['product']['pro_code']
+        product: Product = validated_data['product']
         request = self.context['request']
         user = request.user
-        description = self.context.get('description', "خرید از : اسکارف لی")
+        description = self.context.get('description', "خرید از: اسکارف‌لی")
 
         authority = get_authority(product.sell_price, description, user.phone_number, user.email)
         try:
