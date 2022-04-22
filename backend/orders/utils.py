@@ -1,10 +1,12 @@
+import datetime
+import random
+import string
 import uuid
 
 from requests import post as requests_post
 from json import dumps as json_dumps
 from django.conf import settings
 from rest_framework.exceptions import APIException
-from rest_framework.response import Response
 
 
 def get_authority(amount, description, mobile, email: None):
@@ -56,3 +58,20 @@ def verify(authority, amount) -> bool:
 def get_payment_id(user_id, product_id):
     payment_id = f"{user_id}-{product_id}-{str(uuid.uuid4())[:8]}"
     return payment_id
+
+
+def calculate_pay_amount(coupon, sum_product_price):
+    if coupon is not None:
+        if coupon.is_percent:
+            return sum_product_price * ((100 - coupon.offer_amount) / 100)
+        return sum_product_price - coupon.offer_amount
+    return sum_product_price
+
+
+def code_coupon_key(is_percent: bool, offer_amount: int):
+    """ ddmmyy-Y||N-offer_amount/1000 """
+    date = f"{datetime.date.today().strftime('%d%m%y')}"
+    percent_Y_N = "Y" if is_percent else "N"
+    amount = str(int(offer_amount / 1000))
+    ran = ''.join(random.choices(string.ascii_uppercase + string.digits, k=8))
+    return f"{date}-{percent_Y_N}-{amount}-{str(ran)}"
