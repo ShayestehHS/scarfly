@@ -45,7 +45,7 @@ class Coupon(models.Model):
     is_percent = models.BooleanField(default=True)
     offer_amount = models.PositiveBigIntegerField()
     expire_date = models.DateTimeField(null=True, blank=True)
-    description = models.TextField(null=True, blank=True)
+    descr = models.TextField(null=True, blank=True)
 
     def save(self, *args, **kwargs):
         if self.is_percent and self.offer_amount > 100:
