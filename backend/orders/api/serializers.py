@@ -7,7 +7,7 @@ from orders.utils import get_authority
 from products.models import Product
 
 
-class OrderDetailUpdateSerializer(serializers.ModelSerializer):
+class RetrieveOrderSerializer(serializers.ModelSerializer):
     product = serializers.SerializerMethodField()
 
     def get_product(self, obj: Order):
@@ -20,7 +20,7 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ('product', 'address', 'postal_code', 'authority', 'payment_id', 'status', 'offer_key', 'timestamp')
+        exclude = ('user', 'tracking_code', 'is_paid_to_provider')
         read_only_fields = ('is_paid', 'authority')
 
 
@@ -52,7 +52,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         context = self.context.copy()
         context['product'] = self.validated_data['product']
-        return OrderDetailUpdateSerializer(instance=instance, context=context).data
+        return UpdateOrderStatusSerializer(instance=instance, context=context).data
 
     def create(self, validated_data):
         product: Product = validated_data['product']
