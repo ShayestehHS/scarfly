@@ -3,7 +3,6 @@ import uuid
 from requests import post as requests_post
 from json import dumps as json_dumps
 from django.conf import settings
-from rest_framework import status
 from rest_framework.exceptions import APIException
 from rest_framework.response import Response
 
@@ -28,32 +27,30 @@ def get_authority(amount, description, mobile, email: None):
     return authority
 
 
-def verify(request, amount):
-    t_status = request.GET.get('Status')
-    t_authority = request.GET['Authority']
-    if request.GET.get('Status') != 'OK':
-        return Response({'Failed': 'Transaction failed or canceled by user'}, status.HTTP_400_BAD_REQUEST)
-
+def verify(authority, amount) -> bool:
     req_header = {"accept": "application/json", "content-type": "application/json'"}
     req_data = {
         "merchant_id": settings.ZP_MERCHANT,
         "amount": amount,
-        "authority": t_authority
+        "authority": authority
     }
     req = requests_post(url=settings.ZP_API_VERIFY, data=json_dumps(req_data), headers=req_header)
     if len(req.json()['errors']) != 0:
-        e_code = req.json()['errors']['code']
-        e_message = req.json()['errors']['message']
-        return Response({f"Error code= {e_code}": f"Message: {e_message}"}, status.HTTP_400_BAD_REQUEST)
+        # e_code = req.json()['errors']['code']
+        # e_message = req.json()['errors']['message']
+        # return Response({f"Error code= {e_code}": f"Message: {e_message}"}, status.HTTP_400_BAD_REQUEST)
+        return False
 
     t_status = req.json()['data']['code']
     if t_status != 100:
         if t_status == 101:
-            return Response({'Submitted': str(req.json()['data']['message'])}, status.HTTP_204_NO_CONTENT)
+            # return Response({'Submitted': str(req.json()['data']['message'])}, status.HTTP_204_NO_CONTENT)
+            return True
         else:
-            return Response({'Failed': str(req.json()['data']['message'])}, status.HTTP_400_BAD_REQUEST)
-
-    return Response({'Success': str(req.json()['data']['ref_id'])})
+            # return Response({'Failed': str(req.json()['data']['message'])}, status.HTTP_400_BAD_REQUEST)
+            return False
+    # return Response({'Success': str(req.json()['data']['ref_id'])})
+    return True
 
 
 def get_payment_id(user_id, product_id):

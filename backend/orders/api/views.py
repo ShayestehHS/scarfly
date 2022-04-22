@@ -46,35 +46,9 @@ class CreateOrderAPIView(CreateAPIView):
         serializer.save(user=self.request.user)
 
 
-class RetrieveUpdateOrderAPIView(RetrieveUpdateAPIView):
-    """
-    URL: https://scarfly.ir/orders/pk/
-    URL: https://scarfly.ir/orders/authority/
-    GET:
-        Response:
-            1. HTTP 404:
-                { "detail": message } => (CommonProblem: Invalid authority/pk)
-            2. HTTP 401:
-                { "detail": message } => (CommonProblem: User is not authenticated)
-            3. HTTP 200:
-                {
-                    "id": order_id,
-                    "product": {
-                        "id": product_id,
-                        "name": product_name
-                    },
-                    "timestamp": "2022-02-21T10:41:35.649315+03:30",
-                    "is_paid": false,
-                    "authority": "123abc",
-                    "payment_id": "1-2-13213",
-                    "status": "3",
-                    "offer_key": null,
-                    "user": user_id
-                }
-    """
+class BaseUpdateRetrieveAPIView(RetrieveUpdateAPIView):
     permission_classes = [IsAuthenticated, OnlyOrderOfUser]
     queryset = Order.objects.all()
-    serializer_class = OrderDetailUpdateSerializer
 
     def get_object(self):
         queryset = self.get_queryset()  # Get the base queryset
@@ -90,3 +64,11 @@ class RetrieveUpdateOrderAPIView(RetrieveUpdateAPIView):
         obj = get_object_or_404(queryset, **filter)  # Lookup the object
         self.check_object_permissions(self.request, obj)
         return obj
+
+
+class RetrieveOrderAPIView(BaseUpdateRetrieveAPIView):
+    serializer_class = RetrieveOrderSerializer
+
+
+class UpdateOrderStatusAPIView(BaseUpdateRetrieveAPIView):
+    serializer_class = UpdateOrderStatusSerializer

@@ -6,5 +6,6 @@ app_name = 'orders'
 
 urlpatterns = [
     path('create/', views.CreateOrderAPIView.as_view(), name='create'),
-    path('<str:lookup>/', views.RetrieveUpdateOrderAPIView.as_view(), name='order'),
+    path('retrieve/<str:lookup>/', views.RetrieveOrderAPIView.as_view(), name='retrieve'),
+    path('update/status/<str:lookup>/', views.UpdateOrderStatusAPIView.as_view(), name='update'),
 ]

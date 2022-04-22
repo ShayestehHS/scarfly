@@ -7,9 +7,9 @@
 
 7-  https://scarfly.ir/api/orders/retrieve/<str:authority>/
 8-  https://scarfly.ir/api/orders/retrieve/<int:pk>/
-9-  https://scarfly.ir/api/orders/pk/
-10- https://scarfly.ir/api/orders/authority/
-11- https://scarfly.ir/api/order/create/
+9-  https://scarfly.ir/api/orders/update/status/<str:authority>/
+10- https://scarfly.ir/api/orders/update/status/<int:pk>/
+11- https://scarfly.ir/api/orders/create/
 
 12- https://scarfly.ir/api/products/retrieve/<int:pro_code>/
 
@@ -92,8 +92,21 @@ PUT/PATCH:
             2: HTTP 200:
                 {"first_name":"Value", "last_name":"Value"}
 __________________________________________________________________________________________
+URL: https://scarfly.ir/api/orders/update/status/pk/
+URL: https://scarfly.ir/orders/update/status/authority/
+    PUT:
+        Response:
+            1. HTTP 404:
+                { "detail": message } => (CommonProblem: Invalid authority/pk)
+            2. HTTP 401:
+                { "detail": message } => (CommonProblem: User is not authenticated)
+            3. HTTP 400:
+                { "detail": "Error in validating the authority code" } => (CommonProblem: Order is not paid by user)
+           4. HTTP 200:
+
+__________________________________________________________________________________________
 URL: https://scarfly.ir/api/orders/pk/
-    URL: https://scarfly.ir/orders/authority/
+URL: https://scarfly.ir/orders/authority/
     GET:
         Response:
             1. HTTP 404:
@@ -116,36 +129,11 @@ URL: https://scarfly.ir/api/orders/pk/
                     "user": user_id
                 }
 __________________________________________________________________________________________
-URL: https://scarfly.ir/api/orders/pk/
-URL: https://scarfly.ir/orders/authority/
-NOTE: 1. 🔒User should be authenticated
-GET:
-    Response:
-        1. HTTP 404:
-            { "detail": message } => (CommonProblem: Invalid authority/pk)
-        2. HTTP 401:
-            { "detail": message } => (CommonProblem: User is not authenticated)
-        3. HTTP 200:
-            {
-                "id": order_id,
-                "product": {
-                    "id": product_id,
-                    "name": product_name
-                },
-                "timestamp": "2022-02-21T10:41:35.649315+03:30",
-                "is_paid": false,
-                "authority": "123abc",
-                "payment_id": "1-2-13213",
-                "status": "3",
-                "offer_key": null,
-                "user": user_id
-            }
-__________________________________________________________________________________________
 URL: https://scarfly.ir/api/orders/create/
 NOTE: 1. 🔒User should be authenticated
 POST:
     DATA: {
-            'product_id': 1(String),
+            'product': value[product_id](string),
             'address': value(String),
             'postal_code': value(String),
             }

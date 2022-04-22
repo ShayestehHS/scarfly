@@ -24,6 +24,18 @@ class OrderDetailUpdateSerializer(serializers.ModelSerializer):
         read_only_fields = ('is_paid', 'authority')
 
 
+class UpdateOrderStatusSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        fields = ('status',)
+
+    def update(self, instance: Order, validated_data):
+        is_paid = verify(instance.authority, instance.pay_amount)
+        if not is_paid:
+            raise ValidationError({'detail': 'Error in validating the authority code'})
+        return super(UpdateOrderStatusSerializer, self).update(instance, validated_data)
+
+
 class OrderCreateSerializer(serializers.ModelSerializer):
     product = serializers.CharField()
 
