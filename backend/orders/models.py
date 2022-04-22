@@ -41,7 +41,7 @@ class Order(models.Model):
 
 
 class Coupon(models.Model):
-    key = models.CharField(max_length=32, unique=True)
+    key = models.CharField(max_length=32, unique=True, null=True, blank=True)
     is_percent = models.BooleanField(default=True)
     offer_amount = models.PositiveBigIntegerField()
     expire_date = models.DateTimeField(null=True, blank=True)
@@ -50,4 +50,6 @@ class Coupon(models.Model):
     def save(self, *args, **kwargs):
         if self.is_percent and self.offer_amount > 100:
             raise ValidationError("Invalid 'price amount'")
+        if self.key is None:
+            self.key = code_coupon_key(self.is_percent, self.offer_amount)
         super(Coupon, self).save(*args, **kwargs)
