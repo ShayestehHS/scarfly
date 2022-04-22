@@ -1,7 +1,7 @@
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
-from orders.api.serializers import OrderCreateSerializer, OrderDetailUpdateSerializer
+from orders.api.serializers import OrderCreateSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
 from orders.models import Order
 from orders.permissions import OnlyOrderOfUser
 
