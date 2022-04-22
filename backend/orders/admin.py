@@ -24,3 +24,10 @@ class OrderAdmin(admin.ModelAdmin):
 @admin.register(Coupon)
 class OrderAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
+    fields = (
+        'id',
+        ('offer_amount', 'is_percent'),
+        'key',
+        'expire_date',
+        'description',
+    )
