@@ -50,6 +50,8 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         return product
 
     def validate_offer_key(self, value):
+        if not value:
+            return None
         coupon = Coupon.objects.filter(key__exact=value).first()
         if coupon is None:
             raise NotFound({'offer_key': "Not found"})
