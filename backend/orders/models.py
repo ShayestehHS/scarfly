@@ -53,3 +53,6 @@ class Coupon(models.Model):
         if self.key is None:
             self.key = code_coupon_key(self.is_percent, self.offer_amount)
         super(Coupon, self).save(*args, **kwargs)
+
+    def __str__(self):
+        return self.key
