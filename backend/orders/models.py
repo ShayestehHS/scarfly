@@ -24,7 +24,7 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=10, help_text="Maximum length for postal code is 10 character.")
     authority = models.CharField(max_length=36, unique=True, null=True, blank=True)
     tracking_code = models.CharField(max_length=24, unique=True, null=True, blank=True)
-    pay_amoun = models.PositiveIntegerField()
+    pay_amount = models.PositiveIntegerField()
     payment_id = models.CharField(max_length=18, null=True, blank=True)
     status = models.CharField(choices=ORDER_STATUS, max_length=1, default='1')
     is_paid_to_provider = models.BooleanField(default=False)
