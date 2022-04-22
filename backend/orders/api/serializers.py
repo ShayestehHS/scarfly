@@ -58,7 +58,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
     def to_representation(self, instance):
         context = self.context.copy()
         context['product'] = self.validated_data['product']
-        return UpdateOrderStatusSerializer(instance=instance, context=context).data
+        return RetrieveOrderSerializer(instance=instance, context=context).data
 
     def create(self, validated_data):
         product: Product = validated_data['product']
