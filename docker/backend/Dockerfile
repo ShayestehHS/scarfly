@@ -23,7 +23,7 @@ RUN apk add --update --virtual .tmp-deps \
 
 RUN apk del .tmp-deps
 
-ADD ./docker/backend /app/docker
+ADD ./docker/backend /app/docker/backend
 ADD ./backend /app/backend
 
-RUN chmod +x docker/backend/wsgi-entrypoint.sh
+RUN chmod +x /app/docker/backend/wsgi-entrypoint.sh
