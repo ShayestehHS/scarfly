@@ -19,7 +19,7 @@ class Order(models.Model):
         ('7', 'دریافت شده توسط مشتری'),
     )
     user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True)
-    product = models.ForeignKey(Product, on_delete=models.SET_NULL, null=True)
+    products = models.ManyToManyField(Product, related_name='orders')
     address = models.TextField()
     postal_code = models.CharField(max_length=10, help_text="Maximum length for postal code is 10 character.")
     authority = models.CharField(max_length=36, unique=True, null=True, blank=True)
