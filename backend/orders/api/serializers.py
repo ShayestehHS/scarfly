@@ -36,7 +36,7 @@ class UpdateOrderStatusSerializer(serializers.ModelSerializer):
         return super(UpdateOrderStatusSerializer, self).update(instance, validated_data)
 
 
-class OrderCreateSerializer(serializers.ModelSerializer):
+class CreateOrderSerializer(serializers.ModelSerializer):
     product = serializers.CharField()
 
     class Meta:

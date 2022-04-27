@@ -1,7 +1,7 @@
 from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
-from orders.api.serializers import OrderCreateSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
+from orders.api.serializers import CreateOrderSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
 from orders.models import Order
 from orders.permissions import OnlyOrderOfUser
 
@@ -40,7 +40,7 @@ class CreateOrderAPIView(CreateAPIView):
                 }
     """
     permission_classes = [IsAuthenticated]
-    serializer_class = OrderCreateSerializer
+    serializer_class = CreateOrderSerializer
 
     def perform_create(self, serializer):
         serializer.save(user=self.request.user)
