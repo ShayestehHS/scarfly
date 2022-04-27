@@ -1,7 +1,7 @@
-from rest_framework.generics import CreateAPIView, RetrieveUpdateAPIView, get_object_or_404
+from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
-from orders.api.serializers import CreateOrderSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
+from orders.api.serializers import CreateOrderSerializer, ListOrderSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
 from orders.models import Order
 from orders.permissions import OnlyOrderOfUser
 
@@ -72,3 +72,13 @@ class RetrieveOrderAPIView(BaseUpdateRetrieveAPIView):
 
 class UpdateOrderStatusAPIView(BaseUpdateRetrieveAPIView):
     serializer_class = UpdateOrderStatusSerializer
+
+
+class ListOrderAPIView(ListAPIView):
+    serializer_class = ListOrderSerializer
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        return Order.objects.filter(user_id=self.request.user.id)\
+            .defer(*self.serializer_class.Meta.exclude)\
+            .order_by('timestamp')

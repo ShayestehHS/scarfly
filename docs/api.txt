@@ -10,8 +10,9 @@
 9-  https://scarfly.ir/api/orders/update/status/<str:authority>/
 10- https://scarfly.ir/api/orders/update/status/<int:pk>/
 11- https://scarfly.ir/api/orders/create/
+12- https://scarfly.ir/api/orders/list/
 
-12- https://scarfly.ir/api/products/retrieve/<int:pro_code>/
+13- https://scarfly.ir/api/products/retrieve/<int:pro_code>/
 
 ******************************************************************************************
 
@@ -159,6 +160,48 @@ POST:
                 "status": "1",
                 "offer_key": null,
                 "timestamp": "2022-03-28T13:25:58.205702+04:30"
+            }
+__________________________________________________________________________________________
+URL: https://scarfly.ir/api/orders/list/
+NOTE: 1. 🔒User should be authenticated
+POST:
+    DATA: {
+            'product': value[product_id](string),
+            'address': value(String),
+            'postal_code': value(String),
+            }
+    RETURN:
+        1: HTTP 400:
+            { "detail": message } => (CommonProblem: Not matched `product_id`)
+            { "product": message} => (CommonProblem: Not matched `product_id`)
+        2: HTTP 401:
+            { "detail": message }  => (CommonProblem: User is not authenticated)
+        3: HTTP 500:
+            { "detail" : { "code": value, "message": value } } => (CommonProblem: Invalid data was sent to payment server)
+            { "duplicated" : message } => (CommonProblem: Fail to create unique payment_id)
+        3: HTTP 201:
+            {
+                "count": 12, # Total orders count
+                "next": "https://scarfly.ir/api/orders/list/?limit=5&offset=10" **OR** null ,
+                "previous": "https://scarfly.ir/api/orders/list/?limit=5" **OR** null ,
+                "results": [
+                    {
+                        "id": 17,
+                        "address": "sadfasdf",
+                        "postal_code": "123",
+                        "authority": "A00000000000000000000000000325662267",
+                        "tracking_code": null,
+                        "pay_amount": null,
+                        "payment_id": "5-8-127c5969",
+                        "status": "1",
+                        "timestamp": "2022-03-14T15:01:08.085701+03:30",
+                        "product": 8
+                    },
+                    {...},
+                    {...},
+                    {...},
+                    {...}
+                ]
             }
 __________________________________________________________________________________________
 URL: https://scarfly.ir/api/products/<int:pro_code>/

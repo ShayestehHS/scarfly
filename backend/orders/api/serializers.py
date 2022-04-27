@@ -78,3 +78,9 @@ class CreateOrderSerializer(serializers.ModelSerializer):
             raise APIException({"duplicated": e.message})
 
         return order
+
+
+class ListOrderSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Order
+        exclude = ('user', 'is_paid_to_provider', 'offer_key')
