@@ -55,8 +55,8 @@ def verify(authority, amount) -> bool:
     return True
 
 
-def get_payment_id(user_id, product_id):
-    payment_id = f"{user_id}-{product_id}-{str(uuid.uuid4())[:8]}"
+def get_payment_id(user_id):
+    payment_id = f"{user_id}-{str(uuid.uuid4())[:3]}-{str(uuid.uuid4())[:8]}"
     return payment_id
 
 

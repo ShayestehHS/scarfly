@@ -36,7 +36,7 @@ class Order(models.Model):
 
     def save(self, *args, **kwargs):
         if not self.payment_id:
-            self.payment_id = get_payment_id(self.user_id, self.product_id)
+            self.payment_id = get_payment_id(self.user_id)
         super(Order, self).save(*args, **kwargs)
 
 
