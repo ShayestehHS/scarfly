@@ -22,7 +22,7 @@ class OrderAdmin(admin.ModelAdmin):
 
 
 @admin.register(Coupon)
-class OrderAdmin(admin.ModelAdmin):
+class CouponAdmin(admin.ModelAdmin):
     readonly_fields = ('id',)
     fields = (
         'id',
