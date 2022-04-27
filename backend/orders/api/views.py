@@ -1,9 +1,11 @@
+from django.db.models import Prefetch
 from rest_framework.generics import CreateAPIView, ListAPIView, RetrieveUpdateAPIView, get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 
 from orders.api.serializers import CreateOrderSerializer, ListOrderSerializer, RetrieveOrderSerializer, UpdateOrderStatusSerializer
 from orders.models import Order
 from orders.permissions import OnlyOrderOfUser
+from products.models import Product
 
 
 class CreateOrderAPIView(CreateAPIView):
@@ -79,6 +81,6 @@ class ListOrderAPIView(ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        return Order.objects.filter(user_id=self.request.user.id)\
-            .defer(*self.serializer_class.Meta.exclude)\
+        return Order.objects.filter(user_id=self.request.user.id) \
+            .prefetch_related(Prefetch('products', queryset=Product.objects.only('id', 'pro_code'))) \
             .order_by('timestamp')
