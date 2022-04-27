@@ -20,8 +20,7 @@ from telegram_bot.utils import Connection, activate_user, check_user_validation,
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-bot_token = os.getenv('TELEGRAM_BOT_BOT_TOKEN') or '5208417616:AAHbAgDLrlj8ZZB5Ke7XeJyBseNjhKksswA'
-test_bot_token = os.getenv('TELEGRAM_BOT_TEST_BOT_TOKEN') or '5125696412:AAFwdYw0EJFBDgmtVv5WQgvmJ4W432AhNOI'
+bot_token = os.getenv('TELEGRAM_BOT_BOT_TOKEN')
 ORDER_STATUS = (
     'اقدام به پرداخت',
     'اتمام پرداخت',

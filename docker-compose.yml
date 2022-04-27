@@ -58,7 +58,7 @@ services:
         - db
       restart: always
       env_file:
-        - ./backend/.env
+        - ./telegram_bot/.env
       volumes:
         - /codebase:/codebase
         - /storage:/storage
