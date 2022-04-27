@@ -24,12 +24,12 @@ class Connection(object):
 
         # establishing the connection
         self.conn.autocommit = True
-        logging.info('-- Connection is OPEN --')
+        logging.debug('-- Connection is OPEN --')
         return self.conn
 
     def __exit__(self, exc_type, exc_val, exc_tb):
         self.conn.close()
-        logger.info('-- Connection is CLOSE --')
+        logger.debug('-- Connection is CLOSE --')
 
 
 def validate_payment_id(payment_id: str):

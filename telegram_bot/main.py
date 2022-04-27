@@ -18,6 +18,7 @@ sys.path.append(a)
 from telegram_bot.utils import Connection, activate_user, check_user_validation, validate_payment_id
 
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
+logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.DEBUG)
 logger = logging.getLogger(__name__)
 
 bot_token = os.getenv('TELEGRAM_BOT_BOT_TOKEN')
