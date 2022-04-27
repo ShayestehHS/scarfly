@@ -38,7 +38,7 @@ STATUS_ONE = 0
 
 
 def start(update: Update, context: CallbackContext):
-    logger.info(f"Function: start     User:{update.message.from_user.username}")
+    logger.info(f"Function: start             User:{update.message.from_user.username}")
     chat_id = update.message.chat_id
     is_user_valid = check_user_validation(chat_id)
     if not is_user_valid:
@@ -52,7 +52,7 @@ def start(update: Update, context: CallbackContext):
 
 
 def status(update: Update, context: CallbackContext) -> int:
-    logger.info(f"Function: status     User:{update.message.from_user.username}")
+    logger.info(f"Function: status            User:{update.message.from_user.username}")
     update.message.reply_text(text="کد رهگیری ای که ما به شما دادیم را وارد کنید...")
     return STATUS_SECOND
 
@@ -87,7 +87,7 @@ def status_get_payment_id(update: Update, context: CallbackContext) -> int:
 
 
 def status_end(update: Update, context: CallbackContext) -> int:
-    logger.info(f"Function: status_end User:{update.message.from_user.username}")
+    logger.info(f"Function: status_end        User:{update.message.from_user.username}")
     query = update.callback_query
     query.answer()
     query.edit_message_text(text="امیدوارم دوباره بتونم کمک تون كنم ☺")
