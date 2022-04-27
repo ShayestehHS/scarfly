@@ -53,7 +53,7 @@ services:
     bot:
       container_name: bot
       build:
-        context: ./telegram_bot
+        context: ./docker/bot/Dockerfile
       depends_on:
         - db
       restart: always
