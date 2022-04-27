@@ -103,7 +103,7 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 def main() -> None:
     """Run the bot."""
-    updater = Updater(test_bot_token)
+    updater = Updater(bot_token)
     dispatcher = updater.dispatcher
 
     conv_handler = ConversationHandler(
