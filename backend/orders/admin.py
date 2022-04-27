@@ -16,7 +16,7 @@ start_getting_product.short_description = 'Start to getting products'
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    list_display = ('user', 'product', 'status',)
+    list_display = ('user', 'payment_id', 'status')
     readonly_fields = ('id',)
     actions = [start_getting_product]
 
