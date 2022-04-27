@@ -13,11 +13,11 @@ RUN apt-get install -y python3 python3-pip python-dev build-essential python3-ve
 
 RUN mkdir -p /telegram_bot /storage
 
-COPY ../../telegram_bot/requirements.txt /telegram_bot
+COPY ./telegram_bot/requirements.txt /telegram_bot
 RUN pip3 install -r /telegram_bot/requirements.txt
 
-ADD ../../telegram_bot /telegram_bot
+ADD ./telegram_bot /telegram_bot
 WORKDIR /telegram_bot
 
-COPY ../../telegram_bot/main.py /telegram_bot/main.py
+COPY ./telegram_bot/main.py /telegram_bot/main.py
 CMD ["python3" ,"/telegram_bot/main.py"]
