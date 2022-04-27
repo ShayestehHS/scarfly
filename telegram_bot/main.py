@@ -20,13 +20,17 @@ from telegram_bot.utils import Connection, activate_user, check_user_validation,
 logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
 logger = logging.getLogger(__name__)
 
-api_id = os.getenv('TELEGRAM_BOT_API_ID')
-api_hash = os.getenv('TELEGRAM_BOT_API_HASH')
 bot_token = os.getenv('TELEGRAM_BOT_BOT_TOKEN') or '5208417616:AAHbAgDLrlj8ZZB5Ke7XeJyBseNjhKksswA'
-test_bot_token = os.getenv('TELEGRAM_BOT_TEST_BOT_TOKEN')
-
-logging.basicConfig(format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO)
-
+test_bot_token = os.getenv('TELEGRAM_BOT_TEST_BOT_TOKEN') or '5125696412:AAFwdYw0EJFBDgmtVv5WQgvmJ4W432AhNOI'
+ORDER_STATUS = (
+    'اقدام به پرداخت',
+    'اتمام پرداخت',
+    'دریافت از انبار',
+    'در حال چاپ',
+    'آماده‌ی ارسال',
+    'تحویل داده شده به شرکت پست',
+    'دریافت شده توسط مشتری',
+)
 # Stages
 STATUS_FIRST, STATUS_SECOND = range(2)
 # Callback data
@@ -53,13 +57,18 @@ def status(update: Update, context: CallbackContext) -> int:
 
 
 def status_get_payment_id(update: Update, context: CallbackContext) -> int:
+    chat_id = update.message.chat_id
+    if not check_user_validation(chat_id):
+        update.message.reply_text("شما در ابتدا باید من را فعال کنید تا شما رو بشناسم و از شما دستور بگیرم.")
+        activate_user(chat_id, update)
+        return ConversationHandler.END
     payment_id = update.message.text
     is_valid = validate_payment_id(payment_id)
     if not is_valid:
         update.message.reply_text("این کد از نظر من درست نیست.\nلطفا دوباره کد رو بررسی کن و برام بفرست.\nاگر هم میخوای میتونی این فرایند رو متوقف کنی.\n /cancel")
         return STATUS_SECOND
 
-    subquery = f"SELECT id FROM accounts_user as au WHERE au.chat_id = '{update.message.chat_id}'"
+    subquery = f"SELECT id FROM accounts_user as au WHERE au.chat_id = '{chat_id}'"
     query = f"SELECT status FROM orders_order " \
             f"INNER JOIN accounts_user au on orders_order.user_id = au.id " \
             f"WHERE orders_order.payment_id = '{payment_id}' " \
@@ -71,7 +80,8 @@ def status_get_payment_id(update: Update, context: CallbackContext) -> int:
     if len(results) == 0:
         update.message.reply_text('کد وارد شده، صحیح نمی باشد.\nلطفا کد وارد شده را بررسی نمایید و دوباره ارسال کنید.\nدر غیر اینصورت فرایند جاری را متوقف کنید.\n /cancel')
         return STATUS_SECOND
-    update.message.reply_text(results[0]['status'])
+    status_description = ORDER_STATUS[int(results[0]['status']) - 1]
+    update.message.reply_text(f"وضعيت مرسوله ي شما در وضعيت زير قرار دارد:\n {status_description}")
     return ConversationHandler.END
 
 
@@ -90,7 +100,7 @@ def cancel(update: Update, context: CallbackContext) -> int:
 
 def main() -> None:
     """Run the bot."""
-    updater = Updater(bot_token)
+    updater = Updater(test_bot_token)
     dispatcher = updater.dispatcher
 
     conv_handler = ConversationHandler(

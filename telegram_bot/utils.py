@@ -14,7 +14,7 @@ logger = logging.getLogger(__name__)
 class Connection(object):
     def __enter__(self):
         self.conn = connect(
-            host="db",
+            host="localhost",
             database=os.environ.get('POSTGRES_DB'),
             user=os.environ.get('POSTGRES_USER'),
             password=os.environ.get('POSTGRES_PASSWORD'),
