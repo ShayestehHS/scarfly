@@ -95,8 +95,9 @@ def status_end(update: Update, context: CallbackContext) -> int:
 
 
 def cancel(update: Update, context: CallbackContext) -> int:
-    logger.info(f"Function: cancel     User:{update.message.from_user.username}")
-    update.message.reply_text('فرمان شما دریافت شد. موفق باشی دوست من.')
+    logger.info(f"Function: cancel            User:{update.message.from_user.username}")
+    update.message.reply_text('فرمان شما دریافت شد.\n'
+                              ' موفق باشی دوست من.')
 
     return ConversationHandler.END
 
