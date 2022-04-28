@@ -9,13 +9,13 @@ from django.conf import settings
 from rest_framework.exceptions import APIException
 
 
-def get_authority(amount, description, mobile, email: None):
+def get_authority(amount, description, phone_number, email=None):
     req_data = {
         "merchant_id": settings.ZP_MERCHANT,
         "amount": int(amount),
         "callback_url": settings.CALLBACK_URL,
         "description": description,
-        "metadata": {"mobile": mobile, 'email': email}
+        "metadata": {"mobile": phone_number, 'email': email}
     }
     req_header = {"accept": "application/json", "content-type": "application/json'"}
     req = requests_post(url=settings.ZP_API_REQUEST, data=json_dumps(req_data), headers=req_header)
