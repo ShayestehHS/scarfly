@@ -3,15 +3,7 @@ import axios from 'axios'
 const base_url = 'https://scarfly.ir/api';
 
 export async function verifyUser() {
-    const accessToken = localStorage.getItem('access');
-    if (accessToken != null) {
-        const verifyResponse = await axios.get(
-            base_url + '/accounts/verify/',
-            {headers: {'Authorization': 'Bearer ' + accessToken}});
-        if (verifyResponse.status === 200) {
-            return true
-        }
-    }
+    console.log("Verify User")
 
     const refreshToken = localStorage.getItem('refresh');
     if (refreshToken != null) {
@@ -29,6 +21,7 @@ export async function verifyUser() {
 
 
 export async function Retrieve(input) {
+    console.log("Retrieve")
 
     await axios.get(`${base_url}/orders/${input}/`,
         {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}}).then(res => {
@@ -36,7 +29,9 @@ export async function Retrieve(input) {
         Refresh().then(Retrieve(input))
     })
 
-}
+
+export async function refresh() {
+    console.log("Refresh");
 
 
 export async function Refresh() {
@@ -51,6 +46,8 @@ export async function Refresh() {
 }
 
 export async function login(input) {
+    console.log("Login")
+
     let response = await axios.post(base_url + '/accounts/login/',
         JSON.stringify({"phone_number": input.toString()}),
         {headers: {'content-type': 'application/json'}})
@@ -71,6 +68,8 @@ export async function login(input) {
 }
 
 export const register = async (input) => {
+    console.log("Register")
+
     const response = await axios.post(base_url + '/accounts/register/',
         JSON.stringify({"phone_number": input.toString()}),
         {headers: {'content-type': 'application/json'}}
@@ -95,6 +94,7 @@ const setTokens = (access, refresh) => {
 
 
 export const verify = async () => {
+    console.log("Verify")
     await Refresh()
     if (localStorage.getItem('access')) {
         return await axios.get(base_url + '/accounts/verify/', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}})
