@@ -33,16 +33,25 @@ export async function Retrieve(input) {
 export async function refresh() {
     console.log("Refresh");
 
+    const refreshToken = localStorage.getItem('refresh')
+    if (!refreshToken) return false;
 
-export async function Refresh() {
-    if (localStorage.getItem('refresh')) {
-        let response = await axios.post(`${base_url}/accounts/refresh/`,
-            JSON.stringify({"refresh": localStorage.getItem('refresh')}),
-            {headers: {'content-type': 'application/json'}})
-
-        setTokens(response.data.access)
-        return
-    }
+    return await axios.post(`${base_url}/accounts/refresh/`,
+        JSON.stringify({"refresh": refreshToken}),
+        {headers: {'content-type': 'application/json'}})
+        .then(res => {
+            if (res.status === 200) {
+                setTokens(res.data.access, refreshToken);
+            }
+            console.log(res)
+            return res
+        })
+        .catch(err => {
+            console.log(err)
+            console.log(err.response)
+            console.log(err.response.data)
+            return err.response
+        })
 }
 
 export async function login(input) {
