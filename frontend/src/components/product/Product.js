@@ -16,24 +16,16 @@ export default function Product() {
     const [product, setProduct] = useState()
     let params = useParams()
     useEffect(() => {
-        verifyUser().then(async (r) => setLoginState(r))
-        getData(params.productID).then(async (e) => {
-            if (e.status === 200) {
-                const data = await e.json()
-                setProduct(data)
+        verifyUser().then(async (r) => setLoginState(r));
+
+        getData(params.productID).then(async (res) => {
+            if (res.status === 200) {
+                setProduct(await res.json());
                 return
-            }
-            if (e.status === 404) {
-                toast.error('محصول یافت نشد')
-                return
-            }
-            if (e.status === 400) {
-                toast.error('شماره قبلا وارد شده')
-                return
-            }
-            toast.error(
-                'خطایی رخ داد .\n دوباره سعی کنید.'
-            )
+            } else if (res.status === 404) toast.error('محصول یافت نشد')
+            console.log(res)
+            console.log(res.data)
+            toast.error('خطایی رخ داد .\n دوباره سعی کنید.')
         })
     }, [params])
 
@@ -54,4 +46,3 @@ export default function Product() {
         </div>
     )
 }
-
