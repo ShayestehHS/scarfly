@@ -5,7 +5,7 @@ const CartInfo = ({loginState, productID}) => {
     const nameRef = useRef(),
         familyRef = useRef(),
         addressRef = useRef(),
-        postallCodeRef = useRef();
+        postalCodeRef = useRef();
 
     const cartRef = useRef()
     useEffect(() => {
@@ -16,7 +16,7 @@ const CartInfo = ({loginState, productID}) => {
         const order = {
             "product": productID,
             "address": addressRef.current.value,
-            "postal_code": postallCodeRef.current.value,
+            "postal_code": postalCodeRef.current.value,
         }
 
         createOrder(order).then(res => {
@@ -36,7 +36,7 @@ const CartInfo = ({loginState, productID}) => {
                 <label className="">آدرس</label>
                 <textarea ref={addressRef} type="text" placeholder="آدرس" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[100px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">کد پستی</label>
-                <input ref={postallCodeRef} type="text" placeholder="10 رقم" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <input ref={postalCodeRef} type="text" placeholder="10 رقم" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
             {/* <div className="flex flex-col gap-2 ">
                 <label>روش ارسال</label>
