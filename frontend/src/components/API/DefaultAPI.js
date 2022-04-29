@@ -5,18 +5,11 @@ const base_url = 'https://scarfly.ir/api';
 export async function verifyUser() {
     console.log("Verify User")
 
-    const refreshToken = localStorage.getItem('refresh');
-    if (refreshToken != null) {
-        const refreshResponse = await axios.post(
-            base_url + `/accounts/refresh/`,
-            JSON.stringify({"refresh": refreshToken}),
-            {headers: {'content-type': 'application/json'}});
-        if (refreshResponse.status === 200) {
-            setTokens(refreshResponse.data.access, refreshToken);
-            return true
-        }
-    }
-    return false
+    const verifyResponse = verify();
+    if (verifyResponse.status === 200) return true
+
+    const refreshResponse = refresh();
+    return refreshResponse.status === 200
 }
 
 
@@ -26,8 +19,9 @@ export async function Retrieve(input) {
     await axios.get(`${base_url}/orders/${input}/`,
         {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}}).then(res => {
     }).catch(err => {
-        Refresh().then(Retrieve(input))
+        refresh().then(Retrieve(input))
     })
+}
 
 
 export async function refresh() {
