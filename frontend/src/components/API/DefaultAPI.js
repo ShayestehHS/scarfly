@@ -74,15 +74,18 @@ export const register = async (input) => {
         JSON.stringify({"phone_number": input.toString()}),
         {headers: {'content-type': 'application/json'}}
     ).then(response => {
-        if (response.status === 200) {
+        if (response.status === 201) {
             setTokens(response.data.access, response.data.refresh)
             return true
         }
+        return response
     }).catch(err => {
         console.log(err)
         console.log(err.response)
         console.log(err.response.data)
+        return err.response
     })
+    console.log(response)
     return response === true
 }
 
