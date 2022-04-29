@@ -36,8 +36,9 @@ export async function refresh() {
         .then(res => {
             if (res.status === 200) {
                 setTokens(res.data.access, refreshToken);
+            } else {
+                console.log(res)
             }
-            console.log(res)
             return res
         })
         .catch(err => {
@@ -104,7 +105,20 @@ export const verify = async () => {
 
     const accessToken = localStorage.getItem('access');
     if (accessToken != null) {
-        return await axios.get(base_url + '/accounts/verify/', {headers: {'Authorization': 'Bearer ' + accessToken}})
+        return await axios.get(base_url + '/accounts/verify/',
+            {headers: {'Authorization': 'Bearer ' + accessToken}})
+            .then(res => {
+                if (res.status === 200) {
+                    return res
+                }
+                return null
+            })
+            .catch(err => {
+                console.log(err)
+                console.log(err.response)
+                console.log(err.response.data)
+                return err.response
+            })
     }
     return null
 }
