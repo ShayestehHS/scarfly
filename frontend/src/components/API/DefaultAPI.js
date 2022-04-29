@@ -98,14 +98,14 @@ const setTokens = (access, refresh) => {
 
 export const verify = async () => {
     console.log("Verify")
-    await Refresh()
-    if (localStorage.getItem('access')) {
-        return await axios.get(base_url + '/accounts/verify/', {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}})
+
+    const accessToken = localStorage.getItem('access');
+    if (accessToken != null) {
+        return await axios.get(base_url + '/accounts/verify/', {headers: {'Authorization': 'Bearer ' + accessToken}})
     }
+    return null
 }
 
 export const createOrder = async (input) => {
     return await axios.post(base_url + '/orders/create/', input, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}})
 }
-
-
