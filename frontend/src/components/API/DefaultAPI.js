@@ -5,10 +5,10 @@ const base_url = 'https://scarfly.ir/api';
 export async function verifyUser() {
     console.log("Verify User")
 
-    const verifyResponse = verify();
+    const verifyResponse = await verify();
     if (verifyResponse.status === 200) return true
 
-    const refreshResponse = refresh();
+    const refreshResponse = await refresh();
     return refreshResponse.status === 200
 }
 
