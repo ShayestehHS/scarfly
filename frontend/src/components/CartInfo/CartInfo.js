@@ -20,7 +20,7 @@ const CartInfo = ({loginState, productID}) => {
 
     const payFunc = () => {
         const order = {
-            "product": productID,
+            "products": [productID],
             "address": addressRef.current.value,
             "postal_code": postalCodeRef.current.value,
         }
@@ -46,7 +46,8 @@ const CartInfo = ({loginState, productID}) => {
             </div>
             <div className="flex flex-col gap-4">
                 <label className="">آدرس</label>
-                <textarea ref={addressRef} placeholder="آدرس" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[100px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <textarea ref={addressRef} placeholder="آدرس"
+                          className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[100px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">کد پستی</label>
                 <input ref={postalCodeRef} type="text" placeholder="10 رقم" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
