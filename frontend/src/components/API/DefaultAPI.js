@@ -129,6 +129,33 @@ export async function register(input) {
     return response === true
 }
 
+export async function retrieveUserData(setName,setFamily) {
+    console.log("Retrieve user data")
+
+    let accessToken = localStorage.getItem('access')
+    if (accessToken === null) return false
+
+    return await axios.get(base_url + '/accounts/retrieve/',
+        {headers: {'Authorization': 'Bearer ' + accessToken}})
+        .then(response => {
+            if (response.status === 200) {
+                setName(response.data.first_name)
+                setFamily(response.data.last_name)
+                return response.data
+            }
+            console.log(response)
+            console.log(response.data)
+            return false
+        }).catch(err => {
+            console.log(err)
+            if (err.response && err.response.status === 401) {
+                return false
+            }
+            console.log(err.response)
+            console.log(err.response.data)
+        })
+}
+
 export const createOrder = async (input) => {
     return await axios.post(base_url + '/orders/create/', input, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}})
         .catch(err => {
