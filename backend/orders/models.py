@@ -2,7 +2,7 @@ from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 
-from orders.utils import code_coupon_key, get_payment_id
+from orders.utils import code_coupon_key, get_authority
 from products.models import Product
 
 User = settings.AUTH_USER_MODEL
@@ -24,7 +24,8 @@ class Order(models.Model):
     postal_code = models.CharField(max_length=10, help_text="Maximum length for postal code is 10 character.", null=True, blank=True)
     authority = models.CharField(max_length=36, unique=True, null=True, blank=True)
     tracking_code = models.CharField(max_length=24, unique=True, null=True, blank=True)
-    pay_amount = models.PositiveIntegerField()
+    sum_price = models.PositiveIntegerField(null=True, blank=True)
+    pay_amount = models.PositiveIntegerField(null=True, blank=True)
     payment_id = models.CharField(max_length=18, null=True, blank=True)
     status = models.CharField(choices=ORDER_STATUS, max_length=1, default='1')
     is_paid_to_provider = models.BooleanField(default=False)
@@ -35,8 +36,8 @@ class Order(models.Model):
         return f'Order {self.payment_id}'
 
     def save(self, *args, **kwargs):
-        if not self.payment_id:
-            self.payment_id = get_payment_id(self.user_id)
+        if not self.authority and self.pay_amount:
+            self.authority = get_authority(self.pay_amount, self.user.phone_number, self.user.email)
         super(Order, self).save(*args, **kwargs)
 
 
