@@ -1,5 +1,5 @@
 import {useRef} from "react"
-import {login} from "../API/DefaultAPI"
+import {loginRegister} from "../API/DefaultAPI"
 import toast from 'react-hot-toast';
 
 
@@ -19,13 +19,11 @@ const Login = ({setLogin}) => {
         }
 
         const loading = toast.loading('')
-        const loginResponse =await login(phoneNumberValue)
+        const loginResponse = await loginRegister(phoneNumberValue)
         setLogin(loginResponse);
         toast.dismiss(loading)
         if (loginResponse) {
             toast.success('با موفقیت وارد شدید')
-        } else {
-            toast.error('شماره ثبت نشده است.')
         }
     }
 
