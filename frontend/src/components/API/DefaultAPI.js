@@ -47,10 +47,11 @@ export async function verify() {
         return await axios.get(base_url + '/accounts/verify/',
             {headers: {'Authorization': 'Bearer ' + accessToken}})
             .then(res => {
-                if (res.status === 200) {
-                    return res
+                if (res.status !== 200) {
+                    console.log(res)
+                    return false
                 }
-                return false
+                return res
             })
             .catch(err => {
                 if (err.response.status === 401) {
@@ -129,7 +130,7 @@ export async function register(input) {
     return response === true
 }
 
-export async function retrieveUserData(setName,setFamily) {
+export async function retrieveUserData(setName, setFamily) {
     console.log("Retrieve user data")
 
     let accessToken = localStorage.getItem('access')
