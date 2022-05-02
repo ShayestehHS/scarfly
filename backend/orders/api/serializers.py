@@ -32,6 +32,12 @@ class UpdateOrderStatusSerializer(serializers.ModelSerializer):
         model = Order
         fields = ('status',)
 
+    def validate_status(self, value):
+        instance = getattr(self, 'instance')
+        if int(instance.status) > int(value):
+            raise ValidationError("You can't decrease the value of status")
+        return value
+
     def update(self, instance: Order, validated_data):
         is_paid = verify(instance.authority, instance.pay_amount)
         if not is_paid:
