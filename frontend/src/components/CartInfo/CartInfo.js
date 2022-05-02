@@ -51,17 +51,18 @@ const CartInfo = ({loginState, productID}) => {
                 <label className="">نام</label>
                 <input type="text" placeholder="نام"
                        ref={nameRef} defaultValue={name}
-                       disabled={'disabled' ? name != null : ''}
+                       disabled={'disabled' ? name !== '' : ''}
                        className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">نام خانوادگی</label>
                 <input type="text" placeholder="نام خانوادگی"
                        ref={familyRef} defaultValue={family}
-                       disabled={'disabled' ? family != null : ''}
+                       disabled={'disabled' ? family !== '' : ''}
                        className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
             <div className="flex flex-col gap-4">
                 <label className="">آدرس</label>
-                <textarea ref={addressRef} placeholder="آدرس"
+                <textarea ref={addressRef} required
+                          placeholder="آدرس"
                           className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[100px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">کد پستی</label>
                 <input type="text" placeholder="ده رقم ( اختیاری )"
