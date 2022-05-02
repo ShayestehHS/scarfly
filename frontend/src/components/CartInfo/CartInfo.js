@@ -11,6 +11,7 @@ const CartInfo = ({loginState, productID}) => {
     const nameRef = useRef(),
         familyRef = useRef(),
         addressRef = useRef(),
+        offerKeyRef = useRef(),
         postalCodeRef = useRef();
 
     const cartRef = useRef()
@@ -23,9 +24,23 @@ const CartInfo = ({loginState, productID}) => {
             "products": [productID],
             "address": addressRef.current.value,
             "postal_code": postalCodeRef.current.value,
+            "offer_key": offerKeyRef.current.value,
         }
-
+        console.log(order)
         createOrder(order).then(res => {
+            console.log("Create order")
+            console.log(res)
+            if (res.status !== 201) {
+                if (res.status === 404 && res.data.offer_key != null) {
+                    toast.error('کد تخفیف وارد شده صحیح نمی باشد.');
+                    offerKeyRef.current.value = '';
+                    return;
+                }
+                toast.error("مشکلی پیش آمده. لطثا دوباره امتحان کنید");
+                console.log(res);
+                window.location.reload()
+                return;
+            }
             window.location.href = `https://www.zarinpal.com/pg/StartPay/${res.data.authority}`
         })
     }
@@ -49,7 +64,12 @@ const CartInfo = ({loginState, productID}) => {
                 <textarea ref={addressRef} placeholder="آدرس"
                           className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[100px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">کد پستی</label>
-                <input ref={postalCodeRef} type="text" placeholder="10 رقم" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <input type="text" placeholder="ده رقم ( اختیاری )"
+                       ref={postalCodeRef}
+                       className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <label className="">کد تحفیف</label>
+                <input type="text" ref={offerKeyRef}
+                       className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
             {/* <div className="flex flex-col gap-2 ">
                 <label>روش ارسال</label>
