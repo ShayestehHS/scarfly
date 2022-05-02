@@ -18,7 +18,7 @@ const Login = ({setLogin}) => {
             phoneNumberValue = '+98' + phoneNumberValue.slice(1, 11)
         }
 
-        const loading = toast.loading('')
+        const loading = toast.loading('چند لحظه...')
         const loginResponse = await loginRegister(phoneNumberValue)
         setLogin(loginResponse);
         toast.dismiss(loading)
