@@ -20,6 +20,9 @@ const CartInfo = ({loginState, productID}) => {
     }, [loginState])
 
     const payFunc = () => {
+        console.log("PayFunc")
+
+        toast.loading('در حال ثبت اطلاعات..')
         const order = {
             "products": [productID],
             "address": addressRef.current.value,
