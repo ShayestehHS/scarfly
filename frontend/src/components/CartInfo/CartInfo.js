@@ -1,7 +1,13 @@
-import {useRef, useEffect} from "react"
-import {createOrder} from "../API/DefaultAPI";
+import {useRef, useEffect, useState} from "react"
+import {createOrder, retrieveUserData} from "../API/DefaultAPI";
+import toast from "react-hot-toast";
 
 const CartInfo = ({loginState, productID}) => {
+    const [name, setName] = useState();
+    const [family, setFamily] = useState();
+
+    retrieveUserData(setName, setFamily) // ToDo: Big optimization
+
     const nameRef = useRef(),
         familyRef = useRef(),
         addressRef = useRef(),
@@ -28,9 +34,15 @@ const CartInfo = ({loginState, productID}) => {
         <div ref={cartRef} id="CartInfo" className="w-full flex flex-col gap-10 bg-white rounded-2xl p-4 basis-1/2 mb-12">
             <div className="flex flex-col gap-4 ">
                 <label className="">نام</label>
-                <input ref={nameRef} type="text" placeholder="نام" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <input type="text" placeholder="نام"
+                       ref={nameRef} defaultValue={name}
+                       disabled={'disabled' ? name != null : ''}
+                       className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">نام خانوادگی</label>
-                <input ref={familyRef} type="text" placeholder="نام خانوادگی" className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
+                <input type="text" placeholder="نام خانوادگی"
+                       ref={familyRef} defaultValue={family}
+                       disabled={'disabled' ? family != null : ''}
+                       className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
             <div className="flex flex-col gap-4">
                 <label className="">آدرس</label>
@@ -46,7 +58,6 @@ const CartInfo = ({loginState, productID}) => {
                     </option>
 
                 </select>
-
             </div> */}
             <button onClick={payFunc} type="button" className="h-[50px] rounded-2xl bg-lime-700 text-white text-lg fixed bottom-2 w-[86%] self-center">پرداخت</button>
         </div>

@@ -90,7 +90,7 @@ export async function loginRegister(input) {
 export async function login(input) {
     console.log("Login")
 
-    return  await axios.post(base_url + '/accounts/login/',
+    return await axios.post(base_url + '/accounts/login/',
         JSON.stringify({"phone_number": input.toString()}),
         {headers: {'content-type': 'application/json'}})
         .then(response => {
