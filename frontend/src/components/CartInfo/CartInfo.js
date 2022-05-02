@@ -26,10 +26,10 @@ const CartInfo = ({loginState, productID}) => {
             "postal_code": postalCodeRef.current.value,
             "offer_key": offerKeyRef.current.value,
         }
-        console.log(order)
+
         createOrder(order).then(res => {
             console.log("Create order")
-            console.log(res)
+
             if (res.status !== 201) {
                 if (res.status === 404 && res.data.offer_key != null) {
                     toast.error('کد تخفیف وارد شده صحیح نمی باشد.');
