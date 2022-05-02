@@ -3,19 +3,22 @@ from rest_framework import serializers
 from rest_framework.exceptions import APIException, NotFound, ValidationError
 
 from orders.models import Coupon, Order
-from orders.utils import calculate_pay_amount, get_authority, verify
+from orders.utils import verify
 from products.models import Product
 
 
 class RetrieveOrderSerializer(serializers.ModelSerializer):
-    product = serializers.SerializerMethodField()
+    products = serializers.SerializerMethodField()
 
-    def get_product(self, obj: Order):
-        product = self.context.get('product')
-        if product is None:
-            product = Product.objects.filter(id=obj.product_id).only('name').first()
+    def get_products(self, obj: Order):
+        products = self.context.get('products')
+        if products is None:
+            products = obj.products.only('id', 'name', 'pro_code')
 
-        data = {'id': obj.product_id, 'name': product.name}
+        data = []
+        for product in products:
+            data.append({'id': product.id, 'name': product.name,
+                         'pro_code': product.pro_code})
         return data
 
     class Meta:
@@ -37,17 +40,19 @@ class UpdateOrderStatusSerializer(serializers.ModelSerializer):
 
 
 class CreateOrderSerializer(serializers.ModelSerializer):
-    product = serializers.CharField()
+    products = serializers.ListSerializer(child=serializers.IntegerField())
+    postal_code = serializers.CharField(min_length=10, max_length=10, allow_null=True, allow_blank=True)
 
     class Meta:
         model = Order
-        fields = ('product', 'address', 'postal_code', 'offer_key')
+        fields = ('products', 'address', 'postal_code', 'offer_key')
 
-    def validate_product(self, value):
-        product = Product.objects.filter(pro_code=value).only('sell_price', 'id', 'pro_code').first()
-        if product is None:
-            raise NotFound({'product': 'Not found'})
-        return product
+    def validate_products(self, value):
+        products = Product.objects.filter(pro_code__in=value) \
+            .only('sell_price', 'id', 'pro_code', 'name')
+        if len(products) == 0:
+            raise NotFound({'products': 'Not found'})
+        return products
 
     def validate_offer_key(self, value):
         if not value:
@@ -59,24 +64,22 @@ class CreateOrderSerializer(serializers.ModelSerializer):
 
     def to_representation(self, instance):
         context = self.context.copy()
-        context['product'] = self.validated_data['product']
+        context['products'] = self.validated_data['products']
         return RetrieveOrderSerializer(instance=instance, context=context).data
 
     def create(self, validated_data):
-        product: Product = validated_data['product']
+        products = validated_data['products']
         request = self.context['request']
         user = request.user
-        description = self.context.get('description', "خرید از: اسکارف‌لی")
-        pay_amount = calculate_pay_amount(coupon=validated_data.get('offer_key'), sum_product_price=product.sell_price)
 
-        authority = get_authority(pay_amount, description, user.phone_number, user.email)
         try:
-            order = Order.objects.create(user=user, product_id=product.id, address=validated_data['address'],
-                                         offer_key=validated_data.get('offer_key'), pay_amount=pay_amount,
-                                         authority=authority, postal_code=validated_data['postal_code'])
+            order = Order.objects.create(user=user, address=validated_data['address'],
+                                         offer_key=validated_data.get('offer_key'),
+                                         postal_code=validated_data['postal_code'])
         except IntegrityError as e:
             raise APIException({"duplicated": e.message})
 
+        order.products.add(*products)
         return order
 
 
