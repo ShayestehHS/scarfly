@@ -9,7 +9,7 @@ from django.conf import settings
 from rest_framework.exceptions import APIException
 
 
-def get_authority(amount, description, phone_number, email=None):
+def get_authority(amount, phone_number, email=None, description='خرید از اسکارف لی'):
     req_data = {
         "merchant_id": settings.ZP_MERCHANT,
         "amount": int(amount),

@@ -134,32 +134,37 @@ URL: https://scarfly.ir/api/orders/create/
 NOTE: 1. 🔒User should be authenticated
 POST:
     DATA: {
-            'product': value[product_id](string),
+            'products': value[pro_code, pro_code](List[int, int]),
             'address': value(String),
-            'postal_code': value(String),
+            'postal_code': value(String: 10 character or null),
+            'offer_key':value(String)
             }
     RETURN:
         1: HTTP 400:
-            { "detail": message } => (CommonProblem: Not matched `product_id`)
-            { "product": message} => (CommonProblem: Not matched `product_id`)
+            CommonProblem: Error in json data
         2: HTTP 401:
             { "detail": message }  => (CommonProblem: User is not authenticated)
-        3: HTTP 500:
+        3: HTTP 404:
+            (CommonProblem: Invalid product code)
+        4: HTTP 500:
             { "detail" : { "code": value, "message": value } } => (CommonProblem: Invalid data was sent to payment server)
             { "duplicated" : message } => (CommonProblem: Fail to create unique payment_id)
-        3: HTTP 201:
+        5: HTTP 201:
             {
-                "product": {
-                    "id": 2,
-                    "name": "شال بچگانه"
-                },
-                "address": "asdf",
-                "postal_code": "1737863549",
-                "authority": "A00000000000000000000000000328961379",
-                "payment_id": "1-2-6c27425f",
-                "status": "1",
-                "offer_key": null,
-                "timestamp": "2022-03-28T13:25:58.205702+04:30"
+                'id': 1,
+                'products': [
+                    {'id': 1, 'name': 'product1', 'pro_code': 1},
+                    {'id': 2, 'name': 'product2', 'pro_code': 2}
+                ],
+                'address': 'Lorem ipsum dolor sit amet, consectetur adipiscing elit.',
+                'postal_code': '0123456789',
+                'authority': 'A00000000000000000000000000337132518',
+                'sum_price': 40000,
+                'pay_amount': 40000,
+                'payment_id': '1-b07-1f62a2b4',
+                'status': '1',
+                'offer_key': null,
+                'timestamp': '2022-04-28T17:12:02.966193+04:30'
             }
 __________________________________________________________________________________________
 URL: https://scarfly.ir/api/orders/list/
