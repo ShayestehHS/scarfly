@@ -226,5 +226,30 @@ GET:
                 "description": value
             }
 __________________________________________________________________________________________
+URL: https://scarfly.ir/api/products/list/
+URL: https://scarfly.ir/api/products/list/?productID=1&productID=2&..
+GET:
+    Response:
+        1. HTTP 404:
+            { "detail": "Not found." } => (CommonProblem: Invalid product id)
+        2. HTTP 200:
+            {
+                "count": 4,
+                "next": null,
+                "previous": null,
+                "results": [
+                    {
+                        "pk": 1,
+                        "name": "",
+                        "image": "",
+                        "pro_code": 1,
+                        "sell_price": 59000,
+                        "description": ""
+                    },
+                    {},
+                    {},
+                    {}
+                ]
+            }
 __________________________________________________________________________________________
 __________________________________________________________________________________________
