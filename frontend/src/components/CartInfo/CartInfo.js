@@ -3,21 +3,22 @@ import {createOrder, retrieveUserData} from "../API/DefaultAPI";
 import toast from "react-hot-toast";
 
 const CartInfo = ({loginState, productID}) => {
-    const [name, setName] = useState();
-    const [family, setFamily] = useState();
+    console.log("Cart info component")
 
-    retrieveUserData(setName, setFamily) // ToDo: Big optimization
+    const [fullName, setFullName] = useState({name: '', family: ''});
 
-    const nameRef = useRef(),
-        familyRef = useRef(),
-        addressRef = useRef(),
-        offerKeyRef = useRef(),
-        postalCodeRef = useRef();
-
-    const cartRef = useRef()
     useEffect(() => {
-        cartRef.current && cartRef.current.scrollIntoView()
-    }, [loginState])
+        retrieveUserData().then(resFN => {
+            if (resFN) {
+                setFullName(resFN)
+            }
+        });
+    }, [])
+
+    const nameRef = useRef(), familyRef = useRef(),
+        addressRef = useRef(), postalCodeRef = useRef(),
+        offerKeyRef = useRef(), cartRef = useRef();
+
 
     const payFunc = () => {
         console.log("PayFunc")
@@ -53,13 +54,13 @@ const CartInfo = ({loginState, productID}) => {
             <div className="flex flex-col gap-4 ">
                 <label className="">نام</label>
                 <input type="text" placeholder="نام"
-                       ref={nameRef} defaultValue={name}
-                       disabled={'disabled' ? name !== '' : ''}
+                       ref={nameRef} defaultValue={fullName.name}
+                       disabled={'disabled' ? fullName.name !== '' : ''}
                        className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
                 <label className="">نام خانوادگی</label>
                 <input type="text" placeholder="نام خانوادگی"
-                       ref={familyRef} defaultValue={family}
-                       disabled={'disabled' ? family !== '' : ''}
+                       ref={familyRef} defaultValue={fullName.family}
+                       disabled={'disabled' ? fullName.family !== '' : ''}
                        className="bg-gray-100 focus:border border-gray-100 focus:bg-white h-[50px] rounded-2xl w-full overflow-hidden outline-none p-4 text-right"/>
             </div>
             <div className="flex flex-col gap-4">
