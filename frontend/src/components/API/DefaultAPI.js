@@ -130,7 +130,7 @@ export async function register(input) {
     return response === true
 }
 
-export async function retrieveUserData(setName, setFamily) {
+export async function retrieveUserData() {
     console.log("Retrieve user data")
 
     let accessToken = localStorage.getItem('access')
@@ -140,18 +140,21 @@ export async function retrieveUserData(setName, setFamily) {
         {headers: {'Authorization': 'Bearer ' + accessToken}})
         .then(response => {
             if (response.status === 200) {
-                setName(response.data.first_name)
-                setFamily(response.data.last_name)
-                return response.data
+
+                const data = response.data;
+                const fullData = {'name': data.first_name, 'family': data.last_name};
+                return fullData
             }
-            console.log(response)
-            console.log(response.data)
-            return false
-        }).catch(err => {
+                console.log(response)
+                console.log(response.data)
+                return false
+            }
+        ).catch(err => {
             console.log(err)
             if (err.response && err.response.status === 401) {
                 return false
             }
+            console.log(err)
             console.log(err.response)
             console.log(err.response.data)
         })
