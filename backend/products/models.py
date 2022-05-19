@@ -21,8 +21,8 @@ class Product(models.Model):
     image = models.ImageField(upload_to=product_image_path)
     instagram_url = models.URLField()
     channel_message_id = models.PositiveIntegerField(null=True, blank=True)
-    sell_price = models.PositiveIntegerField()
-    buy_price = models.PositiveIntegerField()
+    sell_price = models.PositiveIntegerField(help_text="Enter the amount in Rial")
+    buy_price = models.PositiveIntegerField(help_text="Enter the amount in Rial")
     description = models.TextField(null=True, blank=True)
     is_available = models.BooleanField(default=True)
 
