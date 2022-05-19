@@ -40,7 +40,7 @@ function CartInfo(productID) {
                     offerKeyRef.current.value = '';
                     return;
                 }
-                toast.error("مشکلی پیش آمده. لطثا دوباره امتحان کنید");
+                toast.error("مشکلی پیش آمد.\nلطفا دوباره امتحان کنید.");
                 console.log(res);
                 window.location.reload()
                 return;
