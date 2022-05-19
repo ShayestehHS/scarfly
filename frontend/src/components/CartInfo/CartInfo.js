@@ -2,7 +2,7 @@ import {useRef, useEffect, useState} from "react"
 import {createOrder, retrieveUserData} from "../API/DefaultAPI";
 import toast from "react-hot-toast";
 
-const CartInfo = ({loginState, productID}) => {
+function CartInfo(productID) {
     console.log("Cart info component")
 
     const [fullName, setFullName] = useState({name: '', family: ''});
@@ -25,7 +25,7 @@ const CartInfo = ({loginState, productID}) => {
 
         toast.loading('در حال ثبت اطلاعات..')
         const order = {
-            "products": [productID],
+            "products": productID,
             "address": addressRef.current.value,
             "postal_code": postalCodeRef.current.value,
             "offer_key": offerKeyRef.current.value,

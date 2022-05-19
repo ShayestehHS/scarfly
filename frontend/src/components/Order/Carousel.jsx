@@ -14,13 +14,11 @@ const getData = async (listProductID) => {
     return await axios.get(url);
 }
 
-function Carousel() {
+function Carousel(listProductID) {
     console.log("Carousel")
 
     const [imgProduct, setImageProduct] = useState([]);
     useEffect(() => {
-            const queryString = require('query-string');
-            const listProductID = queryString.parse(window.location.search).productID;
             const initialImgProduct = [];
 
             getData(listProductID).then((res) => {
