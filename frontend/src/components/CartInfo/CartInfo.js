@@ -2,7 +2,7 @@ import {useRef, useEffect, useState} from "react"
 import {createOrder, retrieveUserData} from "../API/DefaultAPI";
 import toast from "react-hot-toast";
 
-function CartInfo(productID) {
+function CartInfo({productID}) {
     console.log("Cart info component")
 
     const [fullName, setFullName] = useState({name: '', family: ''});
