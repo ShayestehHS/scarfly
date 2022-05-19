@@ -42,7 +42,7 @@ function CartInfo(productID) {
                 }
                 toast.error("مشکلی پیش آمد.\nلطفا دوباره امتحان کنید.");
                 console.log(res);
-                window.location.reload()
+                setTimeout(() => window.location.reload(), 3000)
                 return;
             }
             window.location.href = `https://www.zarinpal.com/pg/StartPay/${res.data.authority}`
