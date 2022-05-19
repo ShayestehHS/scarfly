@@ -163,11 +163,12 @@ export async function retrieveUserData() {
 export const createOrder = async (input) => {
     return await axios.post(base_url + '/orders/create/', input, {headers: {'Authorization': 'Bearer ' + localStorage.getItem('access')}})
         .catch(err => {
-            if (err.response.status === 404) return err.response
+            if (err.response.status === 404) return err
 
             console.log(err)
             console.log(err.response)
             console.log(err.response.data)
+            return err;
         })
 }
 
